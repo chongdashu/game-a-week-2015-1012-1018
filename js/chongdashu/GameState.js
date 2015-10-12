@@ -30,6 +30,7 @@ var p = GameState.prototype;
         this.createGroups();
         this.createBackground();
         this.createGround();
+        this.createDebug();
     };
 
     p.createGroups = function() {
@@ -51,6 +52,22 @@ var p = GameState.prototype;
             tile = this.groundGroup.create(-GLOBAL_GAME_WIDTH/2 + GLOBAL_TILE_WIDTH/2 + x*GLOBAL_TILE_WIDTH, y, "tile-brown");
             tile.anchor.set(0.5, 0.5);
         }
+    };
+
+    p.createDebug = function() {
+        // Create a bitmap the same size as the stage
+        var bitmap = this.game.add.bitmapData(this.game.width, this.game.height);
+        
+        // These functions use the canvas context to draw lines using the canvas API
+        for(var y = this.game.height-GLOBAL_TILE_HEIGHT; y >= 0; y -= GLOBAL_TILE_HEIGHT) {
+            bitmap.context.beginPath();
+            bitmap.context.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            bitmap.context.moveTo(0, y);
+            bitmap.context.lineTo(this.game.width, y);
+            bitmap.context.stroke();
+        }
+
+        this.game.add.image(-GLOBAL_GAME_WIDTH/2, -GLOBAL_GAME_HEIGHT/2, bitmap);
     };
 
     // @phaser
