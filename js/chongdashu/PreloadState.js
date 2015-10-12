@@ -45,6 +45,7 @@ var p = PreloadState.prototype;
 
         // Loading begins here.
         // --------------------
+        this.game.load.image("background", "res/background.png");
        
     };
 

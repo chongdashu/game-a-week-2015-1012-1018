@@ -25,8 +25,25 @@ var p = BootState.prototype;
 
         if (this.game.device.desktop)
         {
-            //  If you have any desktop specific settings, they can go in here
-            // this.scale.pageAlignHorizontally = true;
+            game.canvas.style['display'] = 'none';
+
+            //  Create our scaled canvas. It will be the size of the game * whatever scale value you've set
+            pixel.canvas = Phaser.Canvas.create(document.body, game.width * pixel.scale, game.height * pixel.scale);
+
+            //  Store a reference to the Canvas Context
+            pixel.context = pixel.canvas.getContext('2d');
+
+            //  Add the scaled canvas to the DOM
+            Phaser.Canvas.addToDOM(pixel.canvas);
+
+            //  Disable smoothing on the scaled canvas
+            Phaser.Canvas.setSmoothingEnabled(pixel.context, false);
+
+            //  Cache the width/height to avoid looking it up every render
+            pixel.width = pixel.canvas.width;
+            pixel.height = pixel.canvas.height;
+            
+
         }
         else
         {
@@ -44,6 +61,8 @@ var p = BootState.prototype;
             -GLOBAL_GAME_WIDTH/2,
             -GLOBAL_GAME_HEIGHT/2,
             GLOBAL_GAME_WIDTH, GLOBAL_GAME_HEIGHT);
+
+
 
         //  Unless you specifically know your game needs to support multi-touch I would recommend setting this to 1
         this.game.input.maxPointers = 1;

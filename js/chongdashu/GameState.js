@@ -27,11 +27,18 @@ var p = GameState.prototype;
 
     // @phaser
     p.create = function() {
+        this.background = this.game.add.sprite(0,0, "background");
+        this.background.anchor.set(0.5, 0.5);
     };
 
     // @phaser
     p.update = function() {
        
+    };
+
+    // render
+    p.render = function() {
+        pixel.context.drawImage(game.canvas, 0, 0, game.width, game.height, 0, 0, pixel.width, pixel.height);
     };
 
     
