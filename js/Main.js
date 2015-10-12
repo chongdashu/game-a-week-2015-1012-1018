@@ -6,6 +6,9 @@ var GLOBAL_GAME_HEIGHT = 240;
 var GLOBAL_SCREEN_WIDTH = 640;
 var GLOBAL_SCREEN_HEIGHT = 480;
 
+var GLOBAL_TILE_WIDTH = 32;
+var GLOBAL_TILE_HEIGHT = 32;
+
 var data = {};
 var pixel = { scale: GLOBAL_SCREEN_WIDTH/GLOBAL_GAME_WIDTH, canvas: null, context: null, width: 0, height: 0 };
 

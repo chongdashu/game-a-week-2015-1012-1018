@@ -27,8 +27,30 @@ var p = GameState.prototype;
 
     // @phaser
     p.create = function() {
-        this.background = this.game.add.sprite(0,0, "background");
+        this.createGroups();
+        this.createBackground();
+        this.createGround();
+    };
+
+    p.createGroups = function() {
+        this.backgroundGroup = this.game.add.group();
+        this.groundGroup = this.game.add.group();
+    };
+
+    p.createBackground = function() {
+        this.background = this.backgroundGroup.create(0,0, "background");
         this.background.anchor.set(0.5, 0.5);
+    };
+
+    p.createGround = function() {
+        var x = 0;
+        var y = GLOBAL_GAME_HEIGHT/2 - GLOBAL_TILE_HEIGHT/2;
+
+        var tile = null;
+        for (x=0; x < GLOBAL_GAME_WIDTH/GLOBAL_TILE_WIDTH; x++) {
+            tile = this.groundGroup.create(-GLOBAL_GAME_WIDTH/2 + GLOBAL_TILE_WIDTH/2 + x*GLOBAL_TILE_WIDTH, y, "tile-brown");
+            tile.anchor.set(0.5, 0.5);
+        }
     };
 
     // @phaser
