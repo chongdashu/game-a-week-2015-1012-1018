@@ -53,8 +53,8 @@ var p = GameState.prototype;
         this.player.body.allowGravity = true;
         this.player.body.collideWorldBounds = true;
         this.player.body.maxVelocity = 10000;
-        this.player.body.friction.set(0,0);
-        this.player.body.drag.set(0,0);
+        this.player.body.friction.set(0,1000);
+        this.player.body.drag.set(1000,0);
     };
 
     p.createSystems = function() {

@@ -44,6 +44,7 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
         this.keyStates[Phaser.Keyboard.W] = SpriteMovementSystem.UP;
         this.keyStates[Phaser.Keyboard.A] = SpriteMovementSystem.UP;
         this.keyStates[Phaser.Keyboard.S] = SpriteMovementSystem.UP;
+        this.keyStates[Phaser.Keyboard.D] = SpriteMovementSystem.UP;
         this.keyStates[Phaser.Keyboard.SPACEBAR] = SpriteMovementSystem.UP;
 
     };
@@ -86,6 +87,12 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
             this.group.forEach(function(sprite) {
                 if (self.isJustDown(Phaser.Keyboard.W)) {
                     sprite.body.velocity.y = -GLOBAL_JUMP_SPEED;
+                }
+                if (self.isDown(Phaser.Keyboard.A)) {
+                    sprite.body.velocity.x = -GLOBAL_MOVEMENT_SPEED;
+                }
+                if (self.isDown(Phaser.Keyboard.D)) {
+                    sprite.body.velocity.x = GLOBAL_MOVEMENT_SPEED;
                 }
             }, this);
         }
