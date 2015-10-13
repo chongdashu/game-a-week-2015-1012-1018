@@ -16,6 +16,7 @@ var GLOBAL_MOVEMENT_SPEED = 250;
 var data = {};
 var pixel = { scale: GLOBAL_SCREEN_WIDTH/GLOBAL_GAME_WIDTH, canvas: null, context: null, width: 0, height: 0 };
 
+var tmp;
 
 $(document).ready(function() {
     

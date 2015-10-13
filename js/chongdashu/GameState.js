@@ -35,6 +35,8 @@ var p = GameState.prototype;
         this.createPlayer();
         this.createSystems();
         this.createDebug();
+
+        tmp = new chongdashu.KeyboardComponent(this.player);
     };
 
     p.createPhysics = function() {

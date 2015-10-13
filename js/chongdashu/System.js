@@ -26,10 +26,11 @@ System.prototype.constructor = System;
         console.log("[System], init()");
         this.state = state;
         this.game = state.game;
+        this.components = [];
     };
 
     p.update = function() {
-        // console.log("[System], update()");
+        
     };
 
     p.render = function() {

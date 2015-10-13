@@ -74,14 +74,10 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
     p.update = function() {
         // console.log("[SpriteMovementSystem], update()");
         p.update.call(this);
-        $.each(p.components, function(index, component) {
-            component.update();
-        });
+
 
         this.updateKeyStates();
         this.updateGroup();
-        
-        
     };
 
     p.updateGroup = function() {
@@ -169,7 +165,8 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
         // console.log("[SpriteMovementSystem], render()");
         p.render.call(this);
         p.game.debug.spriteInfo(p.state.player, 16, 16);
-        p.game.debug.bodyInfo(p.state.player, 16, 16);
+        p.game.debug.body(p.state.player);
+        // p.game.debug.bodyInfo(p.state.player, 16, 16);
     };
     
 

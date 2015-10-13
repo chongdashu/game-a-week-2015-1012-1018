@@ -13,18 +13,29 @@ this.chongdashu = this.chongdashu||{};
  * @class Component
  * @constructor
  **/
-var Component = function(game) {
-    this.init(game);
+var Component = function(entity) {
+    this.init(entity);
 };
 var p = Component.prototype;
 Component.prototype.constructor = Component;
     
-    p.components = [];
+    p.componentType = null;
+    p.entity = null;
 
-    p.init = function(game)
+    p.init = function(entity, componentType)
     {
         console.log("[Component], init()");
-        this.game = game;
+        this.entity = entity;
+        this.componentType = componentType;
+    };
+
+    p.getType = function() {
+        console.log("[Component], getType()");
+        return this.componentType;
+    };
+
+    p.getEntity = function() {
+        return this.entity;
     };
     
 

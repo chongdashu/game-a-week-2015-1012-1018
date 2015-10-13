@@ -13,24 +13,28 @@ this.chongdashu = this.chongdashu||{};
  * @class KeyboardComponent
  * @constructor
  **/
-var KeyboardComponent = function(game) {
-    this.init(game);
+var KeyboardComponent = function(entity) {
+    this.init(entity);
 };
-var p = KeyboardComponent.prototype;
-KeyboardComponent.prototype.constructor = KeyboardComponent;
+var p = chongdashu.Utils.extend(KeyboardComponent, chongdashu.Component);
     
-    p.components = [];
+    KeyboardComponent.TYPE = "component:KeyboardComponent";
 
-    p.init = function(game)
+    p.init = function(entity)
     {
         console.log("[KeyboardComponent], init()");
-        this.game = game;
+        this.Component_init(entity, KeyboardComponent.TYPE);
+    };
+
+    p.getType = function() {
+        console.log("[KeyboardComponent], getType()");
+        return this.Component_getType();
     };
     
 
 // Link
 // ----
-chongdashu.KeyboardComponent = KeyboardComponent;
+chongdashu.KeyboardComponent = chongdashu.Utils.promote(KeyboardComponent, "Component");
 
 }());
 
