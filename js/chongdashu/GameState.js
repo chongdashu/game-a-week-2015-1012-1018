@@ -19,6 +19,7 @@ var p = GameState.prototype;
 
     p.prototypes = null;
     p.dataIndex = 0;
+    p.systems = [];
     
     // @phaser
     p.preload = function() {
@@ -30,7 +31,13 @@ var p = GameState.prototype;
         this.createGroups();
         this.createBackground();
         this.createGround();
+        this.createSystems();
         this.createDebug();
+    };
+
+    p.createSystems = function() {
+        this.spriteMovementSystem = new chongdashu.SpriteMovementSystem();
+        this.systems.push(this.spriteMovementSystem);
     };
 
     p.createGroups = function() {
@@ -72,11 +79,20 @@ var p = GameState.prototype;
 
     // @phaser
     p.update = function() {
-       
+        this.updateSystems();
+    };
+
+    p.updateSystems = function() {
+        $.each(this.systems, function(index, system) {
+            system.update();
+        });
     };
 
     // render
     p.render = function() {
+        $.each(this.systems, function(index, system) {
+             system.render();
+        });
         pixel.context.drawImage(game.canvas, 0, 0, game.width, game.height, 0, 0, pixel.width, pixel.height);
     };
 
