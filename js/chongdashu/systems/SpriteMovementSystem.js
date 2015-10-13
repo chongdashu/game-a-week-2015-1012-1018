@@ -29,6 +29,8 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
     SpriteMovementSystem.DOWN = "down";
     SpriteMovementSystem.JUST_DOWN = "just_down";
 
+    p.doJump = false;
+
     p.init_ = function(game)
     {
         console.log("[SpriteMovementSystem], init()");
@@ -85,9 +87,44 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
         var self = this;
         if (this.group) {
             this.group.forEach(function(sprite) {
-                if (self.isJustDown(Phaser.Keyboard.W)) {
-                    sprite.body.velocity.y = -GLOBAL_JUMP_SPEED;
+                
+                if (self.isDown(Phaser.Keyboard.W) && !self.isJustDown(Phaser.Keyboard.W)) {
+                    
+                    if (self.doJump) {
+                        console.log(sprite.anchor);
+                        var squashTween = p.game.add.tween(sprite.scale).to({
+                            x: 1.25,
+                            y: 0.75
+                        }, 200, Phaser.Easing.Exponential.Out, true);
+
+                        squashTween.onComplete.add(function() {
+                            sprite.body.velocity.y = -GLOBAL_JUMP_SPEED;
+                            var squeezeTween = p.game.add.tween(sprite.scale).to({
+                                x: 0.8,
+                                y: 1.25
+                            }, 80, Phaser.Easing.Exponential.InOut, true);
+
+                            squeezeTween.onComplete.add(function() {
+                                // sprite.anchor.set(0.5, 0.5);
+                                sprite.scale.set(1,1);
+                            });
+                        });
+                        self.doJump =false;
+                    }
+                   
                 }
+
+                if (self.isJustDown(Phaser.Keyboard.W)) {
+                    
+                    if (!self.doJump) {
+                        sprite.anchor.set(0.5, 0.5);
+                        sprite.update();
+                        
+                        self.doJump = true;
+                    }
+                }
+                
+
                 if (self.isDown(Phaser.Keyboard.A)) {
                     sprite.body.velocity.x = -GLOBAL_MOVEMENT_SPEED;
                 }
@@ -126,6 +163,8 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
     p.render = function() {
         // console.log("[SpriteMovementSystem], render()");
         p.render.call(this);
+        p.game.debug.spriteInfo(p.state.player, 16, 16);
+        p.game.debug.bodyInfo(p.state.player, 16, 16);
     };
     
 
