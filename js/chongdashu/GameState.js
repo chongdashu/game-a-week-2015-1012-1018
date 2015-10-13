@@ -28,21 +28,44 @@ var p = GameState.prototype;
 
     // @phaser
     p.create = function() {
+        this.createPhysics();
         this.createGroups();
         this.createBackground();
         this.createGround();
+        this.createPlayer();
         this.createSystems();
         this.createDebug();
     };
 
+    p.createPhysics = function() {
+        
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+        //  Set the world (global) gravity
+        this.game.physics.arcade.gravity.y = GLOBAL_GRAVITY;
+    };
+
+    p.createPlayer = function() {
+        this.player = this.agentGroup.create(16, 0, "player");
+        this.player.anchor.set(0.5, 0.5);
+
+        this.game.physics.arcade.enable(this.player);
+        this.player.body.allowGravity = true;
+        this.player.body.collideWorldBounds = true;
+        this.player.body.maxVelocity = 10000;
+        this.player.body.friction.set(0,0);
+        this.player.body.drag.set(0,0);
+    };
+
     p.createSystems = function() {
-        this.spriteMovementSystem = new chongdashu.SpriteMovementSystem();
+        this.spriteMovementSystem = new chongdashu.SpriteMovementSystem(this);
         this.systems.push(this.spriteMovementSystem);
     };
 
     p.createGroups = function() {
         this.backgroundGroup = this.game.add.group();
         this.groundGroup = this.game.add.group();
+        this.agentGroup = this.game.add.group();
     };
 
     p.createBackground = function() {
@@ -58,6 +81,9 @@ var p = GameState.prototype;
         for (x=0; x < GLOBAL_GAME_WIDTH/GLOBAL_TILE_WIDTH; x++) {
             tile = this.groundGroup.create(-GLOBAL_GAME_WIDTH/2 + GLOBAL_TILE_WIDTH/2 + x*GLOBAL_TILE_WIDTH, y, "tile-brown");
             tile.anchor.set(0.5, 0.5);
+            this.game.physics.arcade.enable(tile);
+            tile.body.immovable = true;
+            tile.body.allowGravity = false;
         }
     };
 
@@ -79,7 +105,12 @@ var p = GameState.prototype;
 
     // @phaser
     p.update = function() {
+        this.updatePhysics();
         this.updateSystems();
+    };
+
+    p.updatePhysics = function() {
+        this.game.physics.arcade.collide(this.agentGroup, this.groundGroup);
     };
 
     p.updateSystems = function() {

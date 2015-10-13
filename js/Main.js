@@ -9,6 +9,9 @@ var GLOBAL_SCREEN_HEIGHT = 480;
 var GLOBAL_TILE_WIDTH = 32;
 var GLOBAL_TILE_HEIGHT = 32;
 
+var GLOBAL_GRAVITY = 1000;
+var GLOBAL_JUMP_SPEED = 300;
+
 var data = {};
 var pixel = { scale: GLOBAL_SCREEN_WIDTH/GLOBAL_GAME_WIDTH, canvas: null, context: null, width: 0, height: 0 };
 

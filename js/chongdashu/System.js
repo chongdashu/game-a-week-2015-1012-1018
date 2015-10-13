@@ -13,18 +13,19 @@ this.chongdashu = this.chongdashu||{};
  * @class System
  * @constructor
  **/
-var System = function(game) {
-    this.init(game);
+var System = function(state) {
+    this.init(state);
 };
 var p = System.prototype;
 System.prototype.constructor = System;
     
     p.components = [];
 
-    p.init = function(game)
+    p.init = function(state)
     {
         console.log("[System], init()");
-        this.game = game;
+        this.state = state;
+        this.game = state.game;
     };
 
     p.update = function() {
