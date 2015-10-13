@@ -78,8 +78,9 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
             component.update();
         });
 
-        this.updateGroup();
         this.updateKeyStates();
+        this.updateGroup();
+        
         
     };
 
@@ -95,17 +96,20 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
                         var squashTween = p.game.add.tween(sprite.scale).to({
                             x: 1.25,
                             y: 0.75
-                        }, 200, Phaser.Easing.Exponential.Out, true);
+                        }, 125, Phaser.Easing.Exponential.Out, true);
 
                         squashTween.onComplete.add(function() {
+                            sprite.body.allowGravity = true;
+                            sprite.anchor.set(0.5, 0.5);
+                            sprite.position.y -= 32;
                             sprite.body.velocity.y = -GLOBAL_JUMP_SPEED;
                             var squeezeTween = p.game.add.tween(sprite.scale).to({
-                                x: 0.8,
+                                x: 0.7,
                                 y: 1.25
-                            }, 80, Phaser.Easing.Exponential.InOut, true);
+                            }, 100, Phaser.Easing.Exponential.InOut, true);
 
                             squeezeTween.onComplete.add(function() {
-                                // sprite.anchor.set(0.5, 0.5);
+                                sprite.anchor.set(0.5, 0.5);
                                 sprite.scale.set(1,1);
                             });
                         });
@@ -117,9 +121,10 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
                 if (self.isJustDown(Phaser.Keyboard.W)) {
                     
                     if (!self.doJump) {
-                        sprite.anchor.set(0.5, 0.5);
+                        sprite.anchor.set(0.5, 1);
+                        sprite.position.y += 32;
                         sprite.update();
-                        
+                        sprite.body.allowGravity = false;
                         self.doJump = true;
                     }
                 }
