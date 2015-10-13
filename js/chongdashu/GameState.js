@@ -53,13 +53,12 @@ var p = GameState.prototype;
         this.player.body.allowGravity = true;
         this.player.body.collideWorldBounds = true;
         this.player.body.maxVelocity = 10000;
-        this.player.body.friction.set(0,1000);
+        this.player.body.friction.set(0,10000);
         this.player.body.drag.set(1000,0);
     };
 
     p.createSystems = function() {
-        this.spriteMovementSystem = new chongdashu.SpriteMovementSystem(this);
-        this.systems.push(this.spriteMovementSystem);
+        this.systems.push(this.spriteMovementSystem  = new chongdashu.SpriteMovementSystem(this));
     };
 
     p.createGroups = function() {
