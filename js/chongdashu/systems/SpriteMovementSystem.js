@@ -75,7 +75,6 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
         // console.log("[SpriteMovementSystem], update()");
         p.update.call(this);
 
-
         this.updateKeyStates();
         this.updateGroup();
     };
@@ -88,13 +87,13 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
                 if (self.isDown(Phaser.Keyboard.W) && !self.isJustDown(Phaser.Keyboard.W)) {
                     
                     if (self.doJump) {
-                        console.log(sprite.anchor);
                         var squashTween = p.game.add.tween(sprite.scale).to({
                             x: 1.25,
                             y: 0.75
                         }, 125, Phaser.Easing.Exponential.Out, true);
 
                         squashTween.onComplete.add(function() {
+                            sprite.isJumping = true;
                             sprite.body.allowGravity = true;
                             sprite.anchor.set(0.5, 0.5);
                             sprite.position.y -= 32;
@@ -107,6 +106,7 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
                             squeezeTween.onComplete.add(function() {
                                 sprite.anchor.set(0.5, 0.5);
                                 sprite.scale.set(1,1);
+                                
                             });
                         });
                         self.doJump =false;
@@ -116,13 +116,16 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
 
                 if (self.isJustDown(Phaser.Keyboard.W)) {
                     
-                    if (!self.doJump) {
-                        sprite.anchor.set(0.5, 1);
-                        sprite.position.y += 32;
-                        sprite.update();
-                        sprite.body.allowGravity = false;
-                        self.doJump = true;
+                    if (!sprite.isJumping) {
+                        if (!self.doJump) {
+                            sprite.anchor.set(0.5, 1);
+                            sprite.position.y += 32;
+                            sprite.update();
+                            sprite.body.allowGravity = false;
+                            self.doJump = true;
+                        }
                     }
+                    
                 }
                 
 
@@ -158,6 +161,29 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
                     }
                 }
             });
+        }
+    };
+
+    p.onAgentGroundCollide = function(agent, ground) {
+        if (agent.body.touching.down && !agent.groundTween && agent.isJumping) {
+            agent.anchor.set(0.5,1.0);
+            agent.y += 32;
+            var squashTween = p.game.add.tween(agent.scale).to({
+                x: 1.25,
+                y: 0.75
+            }, 100, Phaser.Easing.Exponential.Out, true);
+            agent.groundTween = squashTween;
+
+           
+
+            squashTween.onComplete.add(function() {
+                agent.anchor.set(0.5);
+                agent.position.y -= 32;
+                agent.groundTween = null;
+                 agent.isJumping = false;
+            });
+
+            squashTween.yoyo(true);
         }
     };
 

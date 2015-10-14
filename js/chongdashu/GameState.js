@@ -111,7 +111,11 @@ var p = GameState.prototype;
     };
 
     p.updatePhysics = function() {
-        this.game.physics.arcade.collide(this.agentGroup, this.groundGroup);
+        this.game.physics.arcade.collide(this.agentGroup, this.groundGroup, this.onAgentGroundCollide, null, this);
+    };
+
+    p.onAgentGroundCollide = function(agent, ground) {
+        this.spriteMovementSystem.onAgentGroundCollide(agent,ground);
     };
 
     p.updateSystems = function() {
