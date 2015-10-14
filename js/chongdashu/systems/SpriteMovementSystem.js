@@ -115,7 +115,18 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
                 }
 
                 if (self.isJustDown(Phaser.Keyboard.W)) {
-                    
+
+                    if (sprite.isJumping && sprite.groundTween) {
+
+                        console.log("ASDA %s", self.doJump);
+                        sprite.groundTween.stop(false);
+                        sprite.anchor.set(0.5);
+                        // sprite.scale.set(1.0);
+                        sprite.position.y -= 32;
+                        sprite.groundTween = null;
+                        sprite.isJumping = false;
+                    }
+
                     if (!sprite.isJumping) {
                         if (!self.doJump) {
                             sprite.anchor.set(0.5, 1);
@@ -127,7 +138,6 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
                     }
                     
                 }
-                
 
                 if (self.isDown(Phaser.Keyboard.A)) {
                     sprite.body.velocity.x = -GLOBAL_MOVEMENT_SPEED;
@@ -165,22 +175,22 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
     };
 
     p.onAgentGroundCollide = function(agent, ground) {
+        console.log("A");
         if (agent.body.touching.down && !agent.groundTween && agent.isJumping) {
             agent.anchor.set(0.5,1.0);
             agent.y += 32;
             var squashTween = p.game.add.tween(agent.scale).to({
                 x: 1.25,
                 y: 0.75
-            }, 100, Phaser.Easing.Exponential.Out, true);
+            }, 125, Phaser.Easing.Exponential.Out, true);
             agent.groundTween = squashTween;
-
-           
+            console.log(agent.groundTween);
 
             squashTween.onComplete.add(function() {
                 agent.anchor.set(0.5);
                 agent.position.y -= 32;
                 agent.groundTween = null;
-                 agent.isJumping = false;
+                agent.isJumping = false;
             });
 
             squashTween.yoyo(true);

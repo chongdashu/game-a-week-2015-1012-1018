@@ -50,6 +50,7 @@ var p = GameState.prototype;
     p.createPlayer = function() {
         this.player = this.agentGroup.create(16, 0, "player");
         this.player.anchor.set(0.5, 0.5);
+        this.player.isJumping = true;
 
         this.game.physics.arcade.enable(this.player);
         this.player.body.allowGravity = true;
