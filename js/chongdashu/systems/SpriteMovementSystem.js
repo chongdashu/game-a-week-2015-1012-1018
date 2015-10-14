@@ -118,7 +118,6 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
 
                     if (sprite.isJumping && sprite.groundTween) {
 
-                        console.log("ASDA %s", self.doJump);
                         sprite.groundTween.stop(false);
                         sprite.anchor.set(0.5);
                         // sprite.scale.set(1.0);
@@ -175,7 +174,6 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
     };
 
     p.onAgentGroundCollide = function(agent, ground) {
-        console.log("A");
         if (agent.body.touching.down && !agent.groundTween && agent.isJumping) {
             agent.anchor.set(0.5,1.0);
             agent.y += 32;
@@ -184,7 +182,6 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
                 y: 0.75
             }, 125, Phaser.Easing.Exponential.Out, true);
             agent.groundTween = squashTween;
-            console.log(agent.groundTween);
 
             squashTween.onComplete.add(function() {
                 agent.anchor.set(0.5);
