@@ -38,11 +38,13 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
     p.update = function() {
         this.System_update();
 
+        var self = this;
+
         this.game.physics.arcade.collide(this.arrowGroup, this.state.groundGroup);
 
         if (this.kc) {
             if (this.kc.isJustDown(Phaser.Keyboard.SPACEBAR)) {
-                var arrow = this.arrowGroup.create(this.state.player.x+32, this.state.player.y, "arrow");
+                var arrow = this.arrowGroup.create(this.state.player.x+32, this.state.player.y-8, "arrow");
                 arrow.anchor.set(0.5, 0.5);
                 this.game.physics.arcade.enable(arrow);
 
@@ -50,12 +52,24 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
                 arrow.animations.play("default");
                 arrow.body.setSize(32, 16);
 
-                arrow.body.velocity.x = this.state.player.x + (this.state.player.body.facingX === Phaser.RIGHT ? 500 : -500);
+                arrow.body.velocity.x = (this.state.player.body.facingX === Phaser.RIGHT ? 1000 : -1000);
+                arrow.body.gravity.set(0,10);
                 arrow.body.collideWorldBounds = true;
                 arrow.angle = 0;
                 arrow.body.bounce.set(0.1, 0.1);
                 arrow.body.drag.set(100);
                 arrow.body.friction.set(100000);
+
+                this.state.player.body.velocity.x -= (this.state.player.body.facingX === Phaser.RIGHT ? 100 : -100);
+
+                var timer = this.game.time.create(true);
+                this.game.physics.arcade.isPaused = true;
+                timer.add(this.game.rnd.between(50,80), function() {
+                    console.log("AHA");
+                    self.game.physics.arcade.isPaused = false;
+                });
+                timer.start();
+                
 
             }
         }
