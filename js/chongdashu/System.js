@@ -30,11 +30,17 @@ System.prototype.constructor = System;
     };
 
     p.update = function() {
-        
+        $.each(this.components, function(index, component) {
+            component.update();
+        });
     };
 
     p.render = function() {
 
+    };
+
+    p.addComponent = function(component) {
+        this.components.push(component);
     };
     
 

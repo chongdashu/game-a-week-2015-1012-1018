@@ -37,6 +37,10 @@ Component.prototype.constructor = Component;
     p.getEntity = function() {
         return this.entity;
     };
+
+    p.update = function() {
+        // console.log("[Component], update()");
+    };
     
 
 // Link

@@ -23,11 +23,6 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
     p.keyboard = null;
     p.group = null;
 
-    SpriteMovementSystem.UP = "up";
-    SpriteMovementSystem.JUST_UP = "just_up";
-    SpriteMovementSystem.DOWN = "down";
-    SpriteMovementSystem.JUST_DOWN = "just_down";
-
     p.doJump = false;
 
     p.init = function(state)
@@ -35,46 +30,28 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
         console.log("[SpriteMovementSystem], init()");
         this.System_init(state);
 
-        this.keyboard = this.state.game.input.keyboard;
+        this.addComponent(this.keyboard = new chongdashu.KeyboardComponent(this.game.input.keyboard));
         this.group = this.state.agentGroup;
 
-        console.log(this.group);
+        this.keyboard.keyStates[Phaser.Keyboard.W] = chongdashu.KeyboardComponent.UP;
+        this.keyboard.keyStates[Phaser.Keyboard.A] = chongdashu.KeyboardComponent.UP;
+        this.keyboard.keyStates[Phaser.Keyboard.S] = chongdashu.KeyboardComponent.UP;
+        this.keyboard.keyStates[Phaser.Keyboard.D] = chongdashu.KeyboardComponent.UP;
+        this.keyboard.keyStates[Phaser.Keyboard.SPACEBAR] = chongdashu.KeyboardComponent.UP;
 
-        this.keyStates = {};
-
-        this.keyStates[Phaser.Keyboard.W] = SpriteMovementSystem.UP;
-        this.keyStates[Phaser.Keyboard.A] = SpriteMovementSystem.UP;
-        this.keyStates[Phaser.Keyboard.S] = SpriteMovementSystem.UP;
-        this.keyStates[Phaser.Keyboard.D] = SpriteMovementSystem.UP;
-        this.keyStates[Phaser.Keyboard.SPACEBAR] = SpriteMovementSystem.UP;
-
+        console.log(this.keyboard.isUp(Phaser.Keyboard.D));
     };
 
-    p.isJustDown = function(keycode) {
-        return this.keyStates[keycode] && (this.keyStates[keycode] === SpriteMovementSystem.JUST_DOWN);
-    };
-
-    p.isDown = function(keycode) {
-        return this.keyStates[keycode] && (this.isJustDown(keycode) || (this.keyStates[keycode] === SpriteMovementSystem.DOWN));
-    };
-
-    p.isJustUp = function(keycode) {
-        return this.keyStates[keycode] && (this.keyStates[keycode] === SpriteMovementSystem.JUST_UP);
-    };
-
-    p.isUp = function(keycode) {
-        return this.keyStates[keycode] && (this.isJustUp(keycode) || (this.keyStates[keycode] === SpriteMovementSystem.UP));
-    };
+    
 
     p.addSprite = function(sprite) {
         this.sprites.push(sprite);
     };
 
     p.update = function() {
-        console.log("[SpriteMovementSystem], update()");
+        // console.log("[SpriteMovementSystem], update()");
         this.System_update();
 
-        this.updateKeyStates();
         this.updateGroup();
     };
 
@@ -83,7 +60,7 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
         if (this.group) {
             this.group.forEach(function(sprite) {
                 
-                if (self.isDown(Phaser.Keyboard.W) && !self.isJustDown(Phaser.Keyboard.W)) {
+                if (self.keyboard.isDown(Phaser.Keyboard.W) && !self.keyboard.isJustDown(Phaser.Keyboard.W)) {
                     
                     if (self.doJump) {
                         var squashTween = this.game.add.tween(sprite.scale).to({
@@ -113,7 +90,7 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
                    
                 }
 
-                if (self.isJustDown(Phaser.Keyboard.W)) {
+                if (self.keyboard.isJustDown(Phaser.Keyboard.W)) {
 
                     if (sprite.isJumping && sprite.groundTween) {
 
@@ -137,38 +114,13 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
                     
                 }
 
-                if (self.isDown(Phaser.Keyboard.A)) {
+                if (self.keyboard.isDown(Phaser.Keyboard.A)) {
                     sprite.body.velocity.x = -GLOBAL_MOVEMENT_SPEED;
                 }
-                if (self.isDown(Phaser.Keyboard.D)) {
+                if (self.keyboard.isDown(Phaser.Keyboard.D)) {
                     sprite.body.velocity.x = GLOBAL_MOVEMENT_SPEED;
                 }
             }, this);
-        }
-    };
-
-    p.updateKeyStates = function() {
-        var self = this;
-
-        if (this.keyboard) {
-            $.each(this.keyStates, function(key, state) {
-                if (self.keyboard.isDown(key)) {
-                    if (state == SpriteMovementSystem.JUST_UP || state == SpriteMovementSystem.UP) {
-                        self.keyStates[key] = SpriteMovementSystem.JUST_DOWN;
-                    }
-                    else {
-                        self.keyStates[key] = SpriteMovementSystem.DOWN;
-                    }
-                }
-                else if (!self.keyboard.isDown(key)) {
-                    if (state == SpriteMovementSystem.JUST_DOWN || state == SpriteMovementSystem.DOWN) {
-                        self.keyStates[key] = SpriteMovementSystem.JUST_UP;
-                    }
-                    else {
-                        self.keyStates[key] = SpriteMovementSystem.UP;
-                    }
-                }
-            });
         }
     };
 
