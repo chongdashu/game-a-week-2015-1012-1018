@@ -44,7 +44,8 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
 
         if (this.kc) {
             if (this.kc.isJustDown(Phaser.Keyboard.SPACEBAR)) {
-                var arrow = this.arrowGroup.create(this.state.player.x+32, this.state.player.y-8, "arrow");
+                var offsetX = this.state.player.body.facingX == Phaser.RIGHT ? 32 : -32;
+                var arrow = this.arrowGroup.create(this.state.player.x+offsetX, this.state.player.y-8, "arrow");
                 arrow.anchor.set(0.5, 0.5);
                 this.game.physics.arcade.enable(arrow);
 
@@ -53,12 +54,15 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
                 arrow.body.setSize(32, 16);
 
                 arrow.body.velocity.x = (this.state.player.body.facingX === Phaser.RIGHT ? 1000 : -1000);
-                arrow.body.gravity.set(0,10);
-                arrow.body.collideWorldBounds = true;
+                // arrow.body.gravity.set(0,10);
+                // arrow.body.collideWorldBounds = true;
                 arrow.angle = 0;
-                arrow.body.bounce.set(0.1, 0.1);
+                arrow.body.bounce.set(this.game.rnd.between(0, 1), this.game.rnd.between(0.3,0.4));
                 arrow.body.drag.set(100);
-                arrow.body.friction.set(100000);
+                arrow.body.friction.set(1000);
+                arrow.scale.set(this.state.player.body.facingX == Phaser.RIGHT ? 1 : -1, 1);
+
+                console.log(this.state.player.body.facingX);
 
                 this.state.player.body.velocity.x -= (this.state.player.body.facingX === Phaser.RIGHT ? 100 : -100);
 
