@@ -13,11 +13,10 @@ this.chongdashu = this.chongdashu||{};
  * @class SpriteMovementSystem
  * @constructor
  **/
-var SpriteMovementSystem = function(game) {
-    this.init_(game);
+var SpriteMovementSystem = function(state) {
+    this.init(state);
 };
-var p = SpriteMovementSystem.prototype = chongdashu.System;
-SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
+var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
 
     p.keyStates = {};
 
@@ -31,13 +30,13 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
 
     p.doJump = false;
 
-    p.init_ = function(game)
+    p.init = function(state)
     {
         console.log("[SpriteMovementSystem], init()");
-        p = SpriteMovementSystem.prototype = new chongdashu.System(game);
+        this.System_init(state);
 
-        this.keyboard = p.state.game.input.keyboard;
-        this.group = p.state.agentGroup;
+        this.keyboard = this.state.game.input.keyboard;
+        this.group = this.state.agentGroup;
 
         console.log(this.group);
 
@@ -72,8 +71,8 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
     };
 
     p.update = function() {
-        // console.log("[SpriteMovementSystem], update()");
-        p.update.call(this);
+        console.log("[SpriteMovementSystem], update()");
+        this.System_update();
 
         this.updateKeyStates();
         this.updateGroup();
@@ -87,7 +86,7 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
                 if (self.isDown(Phaser.Keyboard.W) && !self.isJustDown(Phaser.Keyboard.W)) {
                     
                     if (self.doJump) {
-                        var squashTween = p.game.add.tween(sprite.scale).to({
+                        var squashTween = this.game.add.tween(sprite.scale).to({
                             x: 1.25,
                             y: 0.75
                         }, 125, Phaser.Easing.Exponential.Out, true);
@@ -98,7 +97,7 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
                             sprite.anchor.set(0.5, 0.5);
                             sprite.position.y -= 32;
                             sprite.body.velocity.y = -GLOBAL_JUMP_SPEED;
-                            var squeezeTween = p.game.add.tween(sprite.scale).to({
+                            var squeezeTween = self.game.add.tween(sprite.scale).to({
                                 x: 0.7,
                                 y: 1.25
                             }, 100, Phaser.Easing.Exponential.InOut, true);
@@ -177,7 +176,7 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
         if (agent.body.touching.down && !agent.groundTween && agent.isJumping) {
             agent.anchor.set(0.5,1.0);
             agent.y += 32;
-            var squashTween = p.game.add.tween(agent.scale).to({
+            var squashTween = this.game.add.tween(agent.scale).to({
                 x: 1.25,
                 y: 0.75
             }, 125, Phaser.Easing.Exponential.Out, true);
@@ -196,16 +195,16 @@ SpriteMovementSystem.prototype.constructor = SpriteMovementSystem;
 
     p.render = function() {
         // console.log("[SpriteMovementSystem], render()");
-        p.render.call(this);
-        p.game.debug.spriteInfo(p.state.player, 16, 16);
-        p.game.debug.body(p.state.player);
-        // p.game.debug.bodyInfo(p.state.player, 16, 16);
+        this.System_render();
+        // p.game.debug.spriteInfo(this.state.player, 16, 16);
+        // p.game.debug.body(this.state.player);
+        // p.game.debug.bodyInfo(this.state.player, 16, 16);
     };
     
 
 // Link
 // ----
-chongdashu.SpriteMovementSystem = SpriteMovementSystem;
+chongdashu.SpriteMovementSystem = chongdashu.Utils.promote(SpriteMovementSystem, "System");
 
 }());
 
