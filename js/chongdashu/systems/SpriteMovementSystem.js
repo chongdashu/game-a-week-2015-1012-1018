@@ -38,8 +38,6 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
         this.keyboard.keyStates[Phaser.Keyboard.S] = chongdashu.KeyboardComponent.UP;
         this.keyboard.keyStates[Phaser.Keyboard.D] = chongdashu.KeyboardComponent.UP;
         this.keyboard.keyStates[Phaser.Keyboard.SPACEBAR] = chongdashu.KeyboardComponent.UP;
-
-        console.log(this.keyboard.isUp(Phaser.Keyboard.D));
     };
 
     
@@ -116,9 +114,11 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
 
                 if (self.keyboard.isDown(Phaser.Keyboard.A)) {
                     sprite.body.velocity.x = -GLOBAL_MOVEMENT_SPEED;
+                    sprite.body.facingX = Phaser.LEFT;
                 }
                 if (self.keyboard.isDown(Phaser.Keyboard.D)) {
                     sprite.body.velocity.x = GLOBAL_MOVEMENT_SPEED;
+                    sprite.body.facingX = Phaser.RIGHT;
                 }
             }, this);
         }

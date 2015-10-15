@@ -48,7 +48,7 @@ var p = PreloadState.prototype;
         this.game.load.image("background", "res/background.png");
         this.game.load.image("tile-brown", "res/tile-brown.png");
         this.game.load.image("player", "res/player.png");
-        this.game.load.spritesheet("arrow", "res/arrow.png");
+        this.game.load.spritesheet("arrow", "res/arrow.png", 32, 32);
        
     };
 

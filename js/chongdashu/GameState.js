@@ -58,10 +58,12 @@ var p = GameState.prototype;
         this.player.body.maxVelocity = 10000;
         this.player.body.friction.set(0,10000);
         this.player.body.drag.set(1000,0);
+        this.player.body.facingX = Phaser.RIGHT;
     };
 
     p.createSystems = function() {
         this.systems.push(this.spriteMovementSystem  = new chongdashu.SpriteMovementSystem(this));
+        this.systems.push(this.arrowShootingSystem  = new chongdashu.ArrowShootingSystem(this));
     };
 
     p.createGroups = function() {
@@ -116,7 +118,9 @@ var p = GameState.prototype;
     };
 
     p.onAgentGroundCollide = function(agent, ground) {
-        this.spriteMovementSystem.onAgentGroundCollide(agent,ground);
+        if (this.spriteMovementSystem) {
+            this.spriteMovementSystem.onAgentGroundCollide(agent,ground);
+        }
     };
 
     p.updateSystems = function() {
