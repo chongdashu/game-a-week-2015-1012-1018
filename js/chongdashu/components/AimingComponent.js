@@ -23,6 +23,7 @@ var p = chongdashu.Utils.extend(AimingComponent, chongdashu.Component);
 
     p.angle = 0;
     p.arrow = null;
+    p.speed = 1000;
 
     p.init = function(entity)
     {
@@ -30,6 +31,7 @@ var p = chongdashu.Utils.extend(AimingComponent, chongdashu.Component);
         this.Component_init(entity, AimingComponent.TYPE);
         this.angle = 0;
         this.arrow = null;
+        this.speed = 1000;
     };
 
     p.update = function() {

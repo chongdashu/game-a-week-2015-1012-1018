@@ -106,7 +106,6 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
                                 entity.body.facingX = Phaser.RIGHT;
                             }
                             else if (kc.isDown(Phaser.Keyboard.A) && kc.isDown(Phaser.Keyboard.W)) {
-                                console.log("ASDA");
                                 arrow.angle = 45;
                             }
                             else if (kc.isDown(Phaser.Keyboard.A) && kc.isUp(Phaser.Keyboard.W)) {
@@ -138,8 +137,21 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
                     // allow gravity
                     arrow.body.allowGravity = true;
 
+                    var rotation = arrow.rotation;
+                    if (entity.body.facingX == Phaser.LEFT) {
+                        rotation = Phaser.Math.reverseAngle(rotation);
+                    }
+
+                    arrow.body.velocity.x = ac.speed * Math.cos(rotation);
+                    arrow.body.velocity.y = ac.speed * Math.sin(rotation);
+
+                    console.log("arrow.angle=%s", arrow.angle);
+                    console.log("ac.arrowSpeed=%s", ac.arrowSpeed);
+                    console.log("arrowbody.velocity.x=%s", arrow.body.velocity.x);
+                    console.log("arrowbody.velocity.y=%s", arrow.body.velocity.y);
+
                     // set velocity
-                    arrow.body.velocity.x = (entity.body.facingX === Phaser.RIGHT ? 1000 : -1000);
+                    // arrow.body.velocity.x = (entity.body.facingX === Phaser.RIGHT ? 1000 : -1000);
 
                     // kickback
                     entity.body.velocity.x -= (entity.body.facingX === Phaser.RIGHT ? 100 : -100);
