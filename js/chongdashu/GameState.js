@@ -56,7 +56,7 @@ var p = GameState.prototype;
         this.player.body.maxVelocity = 10000;
         this.player.body.friction.set(0,10000);
         this.player.body.drag.set(1000,0);
-        this.player.body.facingX = Phaser.RIGHT;
+        this.player.body.facingX = Phaser.LEFT;
 
         new chongdashu.KeyboardComponent(this.game.input.keyboard).addTo(this.player);
         new chongdashu.AimingComponent(this.player).addTo(this.player);
@@ -64,7 +64,7 @@ var p = GameState.prototype;
     };
 
     p.createSystems = function() {
-        this.systems.push(this.spriteMovementSystem  = new chongdashu.SpriteMovementSystem(this));
+        // this.systems.push(this.spriteMovementSystem  = new chongdashu.SpriteMovementSystem(this));
         this.systems.push(this.arrowShootingSystem  = new chongdashu.ArrowShootingSystem(this));
     };
 

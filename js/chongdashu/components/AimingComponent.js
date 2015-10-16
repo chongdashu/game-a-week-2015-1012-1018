@@ -22,12 +22,14 @@ var p = chongdashu.Utils.extend(AimingComponent, chongdashu.Component);
     AimingComponent.TYPE = "component:AimingComponent";
 
     p.angle = 0;
+    p.arrow = null;
 
     p.init = function(entity)
     {
         console.log("[AimingComponent], init()");
         this.Component_init(entity, AimingComponent.TYPE);
         this.angle = 0;
+        this.arrow = null;
     };
 
     p.update = function() {

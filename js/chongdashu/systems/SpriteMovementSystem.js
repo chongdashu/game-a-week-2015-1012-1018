@@ -39,11 +39,6 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
             var sprite = entity;
             var kc = sprite.komponents[chongdashu.KeyboardComponent.TYPE];
             
-            
-            if (kc.isDown(Phaser.Keyboard.W)) {
-
-            }
-
             if (kc.isDown(Phaser.Keyboard.W) && !kc.isJustDown(Phaser.Keyboard.W)) {
                 
                 if (self.doJump) {
@@ -71,7 +66,6 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
                     });
                     self.doJump =false;
                 }
-               
             }
 
             if (kc.isJustDown(Phaser.Keyboard.W)) {
@@ -107,8 +101,6 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
                 sprite.body.facingX = Phaser.RIGHT;
             }
         }
-
-        
     };
 
     p.onAgentGroundCollide = function(agent, ground) {
