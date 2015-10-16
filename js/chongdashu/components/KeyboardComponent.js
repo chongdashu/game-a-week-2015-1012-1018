@@ -27,17 +27,28 @@ var p = chongdashu.Utils.extend(KeyboardComponent, chongdashu.Component);
     KeyboardComponent.JUST_DOWN = "just_down";
 
     p.keyStates = null;
+    p.keyboard = null;
+    p.lastUpdateId = null;
 
     p.init = function(entity)
     {
         console.log("[KeyboardComponent], init()");
         this.Component_init(entity, KeyboardComponent.TYPE);
         this.keyStates = {};
+        this.keyboard = entity;
+        this.lastUpdateId = -1;
+
+        this.initKey(Phaser.Keyboard.W);
+        this.initKey(Phaser.Keyboard.A);
+        this.initKey(Phaser.Keyboard.S);
+        this.initKey(Phaser.Keyboard.D);
+        this.initKey(Phaser.Keyboard.SPACEBAR);
     };
 
-    p.getType = function() {
-        console.log("[KeyboardComponent], getType()");
-        return this.Component_getType();
+    p.initKey = function(keycode) {
+        if (!(keycode in this.keyStates)) {
+            this.keyStates[keycode] = KeyboardComponent.UP;
+        }
     };
 
     p.isJustDown = function(keycode) {
@@ -62,7 +73,7 @@ var p = chongdashu.Utils.extend(KeyboardComponent, chongdashu.Component);
         var self = this;
 
         $.each(this.keyStates, function(key, state) {
-            if (self.entity.isDown(key)) {
+            if (self.keyboard.isDown(key)) {
                 if (state == KeyboardComponent.JUST_UP || state == KeyboardComponent.UP) {
                     self.keyStates[key] = KeyboardComponent.JUST_DOWN;
                 }
@@ -70,7 +81,7 @@ var p = chongdashu.Utils.extend(KeyboardComponent, chongdashu.Component);
                     self.keyStates[key] = KeyboardComponent.DOWN;
                 }
             }
-            else if (!self.entity.isDown(key)) {
+            else if (!self.keyboard.isDown(key)) {
                 if (state == KeyboardComponent.JUST_DOWN || state == KeyboardComponent.DOWN) {
                     self.keyStates[key] = KeyboardComponent.JUST_UP;
                 }
@@ -79,6 +90,9 @@ var p = chongdashu.Utils.extend(KeyboardComponent, chongdashu.Component);
                 }
             }
         });
+
+
+        
     };
     
 

@@ -35,8 +35,6 @@ var p = GameState.prototype;
         this.createPlayer();
         this.createSystems();
         this.createDebug();
-
-        tmp = new chongdashu.KeyboardComponent(this.player);
     };
 
     p.createPhysics = function() {
@@ -59,6 +57,10 @@ var p = GameState.prototype;
         this.player.body.friction.set(0,10000);
         this.player.body.drag.set(1000,0);
         this.player.body.facingX = Phaser.RIGHT;
+
+        new chongdashu.KeyboardComponent(this.game.input.keyboard).addTo(this.player);
+        new chongdashu.AimingComponent(this.player).addTo(this.player);
+
     };
 
     p.createSystems = function() {
@@ -124,9 +126,16 @@ var p = GameState.prototype;
     };
 
     p.updateSystems = function() {
-        $.each(this.systems, function(index, system) {
-            system.update();
+        var self = this;
+        self.agentGroup.forEach(function(agent) {
+            $.each(agent.komponents, function(key, component) {
+                component.update();
+            });
+            $.each(self.systems, function(index, system) {
+                system.update(agent);
+            });
         });
+       
     };
 
     // render

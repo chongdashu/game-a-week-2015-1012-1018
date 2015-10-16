@@ -22,11 +22,23 @@ Component.prototype.constructor = Component;
     p.componentType = null;
     p.entity = null;
 
+    Component.add = function (entity, componentType)  {
+
+    };
+
     p.init = function(entity, componentType)
     {
         console.log("[Component], init()");
         this.entity = entity;
         this.componentType = componentType;
+    };
+
+    p.addTo = function(entity) {
+        console.log(entity.komponents);
+        if (!entity.komponents) {
+            entity.komponents = {};
+        }
+        entity.komponents[this.getType()] = this;
     };
 
     p.getType = function() {

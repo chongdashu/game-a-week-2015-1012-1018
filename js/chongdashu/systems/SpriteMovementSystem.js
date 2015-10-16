@@ -30,98 +30,85 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
         console.log("[SpriteMovementSystem], init()");
         this.System_init(state);
 
-        this.addComponent(this.keyboard = new chongdashu.KeyboardComponent(this.game.input.keyboard));
-        this.group = this.state.agentGroup;
-
-        this.keyboard.keyStates[Phaser.Keyboard.W] = chongdashu.KeyboardComponent.UP;
-        this.keyboard.keyStates[Phaser.Keyboard.A] = chongdashu.KeyboardComponent.UP;
-        this.keyboard.keyStates[Phaser.Keyboard.S] = chongdashu.KeyboardComponent.UP;
-        this.keyboard.keyStates[Phaser.Keyboard.D] = chongdashu.KeyboardComponent.UP;
-        this.keyboard.keyStates[Phaser.Keyboard.SPACEBAR] = chongdashu.KeyboardComponent.UP;
+        this.addComponent(chongdashu.KeyboardComponent.TYPE);
     };
 
-    
+    p.update = function(entity) {
+        if (this.System_update(entity)) {
+            var self = this;
+            var sprite = entity;
+            var kc = sprite.komponents[chongdashu.KeyboardComponent.TYPE];
+            
+            
+            if (kc.isDown(Phaser.Keyboard.W)) {
 
-    p.addSprite = function(sprite) {
-        this.sprites.push(sprite);
-    };
+            }
 
-    p.update = function() {
-        // console.log("[SpriteMovementSystem], update()");
-        this.System_update();
-
-        this.updateGroup();
-    };
-
-    p.updateGroup = function() {
-        var self = this;
-        if (this.group) {
-            this.group.forEach(function(sprite) {
+            if (kc.isDown(Phaser.Keyboard.W) && !kc.isJustDown(Phaser.Keyboard.W)) {
                 
-                if (self.keyboard.isDown(Phaser.Keyboard.W) && !self.keyboard.isJustDown(Phaser.Keyboard.W)) {
-                    
-                    if (self.doJump) {
-                        var squashTween = this.game.add.tween(sprite.scale).to({
-                            x: 1.25,
-                            y: 0.75
-                        }, 125, Phaser.Easing.Exponential.Out, true);
+                if (self.doJump) {
+                    var squashTween = this.game.add.tween(sprite.scale).to({
+                        x: 1.25,
+                        y: 0.75
+                    }, 125, Phaser.Easing.Exponential.Out, true);
 
-                        squashTween.onComplete.add(function() {
-                            sprite.isJumping = true;
-                            sprite.body.allowGravity = true;
-                            sprite.anchor.set(0.5, 0.5);
-                            sprite.position.y -= 32;
-                            sprite.body.velocity.y = -GLOBAL_JUMP_SPEED;
-                            var squeezeTween = self.game.add.tween(sprite.scale).to({
-                                x: 0.7,
-                                y: 1.25
-                            }, 100, Phaser.Easing.Exponential.InOut, true);
-
-                            squeezeTween.onComplete.add(function() {
-                                sprite.anchor.set(0.5, 0.5);
-                                sprite.scale.set(1,1);
-                                
-                            });
-                        });
-                        self.doJump =false;
-                    }
-                   
-                }
-
-                if (self.keyboard.isJustDown(Phaser.Keyboard.W)) {
-
-                    if (sprite.isJumping && sprite.groundTween) {
-
-                        sprite.groundTween.stop(false);
-                        sprite.anchor.set(0.5);
-                        // sprite.scale.set(1.0);
+                    squashTween.onComplete.add(function() {
+                        sprite.isJumping = true;
+                        sprite.body.allowGravity = true;
+                        sprite.anchor.set(0.5, 0.5);
                         sprite.position.y -= 32;
-                        sprite.groundTween = null;
-                        sprite.isJumping = false;
-                    }
+                        sprite.body.velocity.y = -GLOBAL_JUMP_SPEED;
+                        var squeezeTween = self.game.add.tween(sprite.scale).to({
+                            x: 0.7,
+                            y: 1.25
+                        }, 100, Phaser.Easing.Exponential.InOut, true);
 
-                    if (!sprite.isJumping) {
-                        if (!self.doJump) {
-                            sprite.anchor.set(0.5, 1);
-                            sprite.position.y += 32;
-                            sprite.update();
-                            sprite.body.allowGravity = false;
-                            self.doJump = true;
-                        }
-                    }
-                    
+                        squeezeTween.onComplete.add(function() {
+                            sprite.anchor.set(0.5, 0.5);
+                            sprite.scale.set(1,1);
+                            
+                        });
+                    });
+                    self.doJump =false;
+                }
+               
+            }
+
+            if (kc.isJustDown(Phaser.Keyboard.W)) {
+
+                if (sprite.isJumping && sprite.groundTween) {
+
+                    sprite.groundTween.stop(false);
+                    sprite.anchor.set(0.5);
+                    // sprite.scale.set(1.0);
+                    sprite.position.y -= 32;
+                    sprite.groundTween = null;
+                    sprite.isJumping = false;
                 }
 
-                if (self.keyboard.isDown(Phaser.Keyboard.A)) {
-                    sprite.body.velocity.x = -GLOBAL_MOVEMENT_SPEED;
-                    sprite.body.facingX = Phaser.LEFT;
+                if (!sprite.isJumping) {
+                    if (!self.doJump) {
+                        sprite.anchor.set(0.5, 1);
+                        sprite.position.y += 32;
+                        sprite.update();
+                        sprite.body.allowGravity = false;
+                        self.doJump = true;
+                    }
                 }
-                if (self.keyboard.isDown(Phaser.Keyboard.D)) {
-                    sprite.body.velocity.x = GLOBAL_MOVEMENT_SPEED;
-                    sprite.body.facingX = Phaser.RIGHT;
-                }
-            }, this);
+                
+            }
+
+            if (kc.isDown(Phaser.Keyboard.A)) {
+                sprite.body.velocity.x = -GLOBAL_MOVEMENT_SPEED;
+                sprite.body.facingX = Phaser.LEFT;
+            }
+            if (kc.isDown(Phaser.Keyboard.D)) {
+                sprite.body.velocity.x = GLOBAL_MOVEMENT_SPEED;
+                sprite.body.facingX = Phaser.RIGHT;
+            }
         }
+
+        
     };
 
     p.onAgentGroundCollide = function(agent, ground) {
