@@ -31,7 +31,7 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
 
         this.addComponent(chongdashu.KeyboardComponent.TYPE);
         this.addComponent(chongdashu.AimingComponent.TYPE);
-        this.arrowGroup = this.game.add.group();
+        this.arrowGroup = state.arrowGroup;
     };
 
     p.createArrow = function(entity) {
@@ -40,6 +40,13 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
         var arrow = this.arrowGroup.create(entity.x, entity.y, "arrow");
         arrow.anchor.set(0.5, 0.5);
         this.game.physics.arcade.enable(arrow);
+
+        arrow.events.onKilled.addOnce(function(arrow) {
+            this.arrowGroup.remove(arrow);
+        }, this);
+
+        arrow.outOfBoundsKill = true;
+        arrow.checkWorldBounds = true;
 
         arrow.animations.add("aim", [1], 60);
         arrow.animations.add("shoot", [0,1], 60);
@@ -52,6 +59,10 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
         
 
         return arrow;
+    };
+
+    p.onArrowEnemyCollide = function(arrow, enemy) {
+
     };
 
     p.update = function(entity) {
@@ -187,10 +198,7 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
                     // remove arrow from component
                     ac.arrow = null;
                     ac.arrowReleaseTime = this.game.time.time;
-
-
                 }
-
             }
         }
     };

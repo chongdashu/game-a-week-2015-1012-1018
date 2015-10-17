@@ -50,13 +50,16 @@ System.prototype.constructor = System;
 
     p.containsKeys = function(entity, components) {
 
+        var containsKeys = true;
+
         $.each(components, function(key, value) {
+
             if (!(key  in entity.komponents)) {
+                containsKeys = false;
                 return false;
             }
         });
-
-        return true;
+        return containsKeys;
     };
 
     p.render = function() {

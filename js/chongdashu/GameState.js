@@ -20,6 +20,7 @@ var p = GameState.prototype;
     p.prototypes = null;
     p.dataIndex = 0;
     p.systems = [];
+    p.groups = [];
     
     // @phaser
     p.preload = function() {
@@ -54,8 +55,15 @@ var p = GameState.prototype;
     p.createEnemy = function() {
         var enemy = this.enemyGroup.create(-160+32, -96, "enemy");
         enemy.anchor.set(0.5, 0.5);
-        enemy.animations.add("idle", [0,1], 4, true);
-        enemy.animations.add("death", [1,2,3,4,5], 24);
+        
+        var enemyIdleAnim = enemy.animations.add("idle", [0,1], 4, true);
+        var enemyKillAnim = enemy.animations.add("kill", [1,2,3,4], 24);
+
+        enemyKillAnim.onComplete.add(function(entity) {
+            entity.kill();
+            this.enemyGroup.remove(entity);
+        }, this);
+        
         enemy.animations.play("idle");
 
         this.game.physics.arcade.enable(enemy);
@@ -64,6 +72,10 @@ var p = GameState.prototype;
         enemy.body.allowGravity = false;
         enemy.body.bounce.set(1,0);
         enemy.body.velocity.set(50,0);
+
+        new chongdashu.EnemyComponent().addTo(enemy);
+        new chongdashu.HealthComponent().addTo(enemy);
+        new chongdashu.AudioComponent(this.game).addTo(enemy);
     };
 
     p.createPlayer = function() {
@@ -89,13 +101,17 @@ var p = GameState.prototype;
         this.systems.push(this.movementSystem  = new chongdashu.MovementSystem(this));
         this.systems.push(this.jumpingSystem  = new chongdashu.JumpingSystem(this));
         this.systems.push(this.arrowShootingSystem  = new chongdashu.ArrowShootingSystem(this));
+        this.systems.push(this.enemySystem  = new chongdashu.EnemySystem(this));
     };
 
     p.createGroups = function() {
-        this.backgroundGroup = this.game.add.group();
-        this.groundGroup = this.game.add.group();
-        this.agentGroup = this.game.add.group();
-        this.enemyGroup = this.game.add.group();
+        this.groups = [];
+
+        this.groups.push(this.backgroundGroup = this.game.add.group());
+        this.groups.push(this.groundGroup = this.game.add.group());
+        this.groups.push(this.agentGroup = this.game.add.group());
+        this.groups.push(this.enemyGroup = this.game.add.group());
+        this.groups.push(this.arrowGroup = this.game.add.group());
     };
 
     p.createBackground = function() {
@@ -143,6 +159,9 @@ var p = GameState.prototype;
         if (this.agentGroup && this.groundGroup) {
             this.game.physics.arcade.collide(this.agentGroup, this.groundGroup, this.onAgentGroundCollide, null, this);
         }
+        if (this.arrowGroup && this.enemyGroup) {
+            this.game.physics.arcade.collide(this.arrowGroup, this.enemyGroup, this.onArrowEnemyCollide, null, this);
+        }
     };
 
     p.onAgentGroundCollide = function(agent, ground) {
@@ -151,20 +170,29 @@ var p = GameState.prototype;
         }
     };
 
+    p.onArrowEnemyCollide = function(arrow, enemy) {
+        if (this.enemySystem) {
+            this.enemySystem.onArrowEnemyCollide(arrow, enemy);
+        }
+        if (this.arrowShootingSystem) {
+            this.arrowShootingSystem.onArrowEnemyCollide(arrow, enemy);
+        }
+    };
+
     p.updateSystems = function() {
         var self = this;
-        if (self.agentGroup) {
-            self.agentGroup.forEach(function(agent) {
-                $.each(agent.komponents, function(key, component) {
-                    component.update();
-                });
-                $.each(self.systems, function(index, system) {
-                    system.update(agent);
-                });
+        $.each(this.groups, function(index, group){
+            group.forEach(function(entity) {
+                if (entity.komponents) {
+                    $.each(entity.komponents, function(key, component) {
+                        component.update();
+                    });
+                    $.each(self.systems, function(index, system) {
+                        system.update(entity);
+                    });
+                }
             });
-        }
-        
-       
+        });
     };
 
     // render

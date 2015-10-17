@@ -21,12 +21,15 @@
     <script type="text/javascript" src="js/chongdashu/systems/MovementSystem.js"></script> 
     <script type="text/javascript" src="js/chongdashu/systems/JumpingSystem.js"></script> 
     <script type="text/javascript" src="js/chongdashu/systems/ArrowShootingSystem.js"></script>
+    <script type="text/javascript" src="js/chongdashu/systems/EnemySystem.js"></script>
 
     <script type="text/javascript" src="js/chongdashu/Component.js"></script>
     <script type="text/javascript" src="js/chongdashu/components/KeyboardComponent.js"></script>
     <script type="text/javascript" src="js/chongdashu/components/MouseComponent.js"></script>
     <script type="text/javascript" src="js/chongdashu/components/AimingComponent.js"></script>
     <script type="text/javascript" src="js/chongdashu/components/AudioComponent.js"></script>
+    <script type="text/javascript" src="js/chongdashu/components/EnemyComponent.js"></script>
+    <script type="text/javascript" src="js/chongdashu/components/HealthComponent.js"></script>
     
     <script type="text/javascript" src="js/chongdashu/BootState.js"></script>
     <script type="text/javascript" src="js/chongdashu/PreloadState.js"></script>
@@ -38,5 +41,33 @@
 
 <body style="background-color: #eeeeee">
     <div id="game-container" style="background-color: 0x000000;"></div>
+    <div id="debug" style="position: absolute; top: 0; left: 640; background-color: black; color: white; font-family: consolas;">
+
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            setInterval(function() { 
+
+                var state = game.state.getCurrentState();
+                var output = "DEBUG<br>";
+
+                if (state) {
+                    if (state.enemyGroup) {
+                        output += "enemyGroup.length=" + state.enemyGroup.length;
+                        output += "<br>";
+                    }
+                    if (state.arrowGroup) {
+                        output += "arrowGroup.length=" + state.arrowGroup.length;
+                        output += "<br>";
+                    }
+                }
+
+                $("#debug").html(output);
+
+
+            }, 500);
+        });
+    </script>
 </body>
 </html>
