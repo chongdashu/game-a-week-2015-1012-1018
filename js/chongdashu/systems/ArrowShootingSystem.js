@@ -130,6 +130,10 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
                 // position the arrow appropriately according to the entity position
                 ac.arrow.position.x = entity.position.x;
                 ac.arrow.position.y = entity.position.y;
+
+                if (entity.body && entity.anchor.y == 1) {
+                    ac.arrow.position.y -= 32;
+                }
             }
 
             if (kc.isJustUp(Phaser.Keyboard.X)) {

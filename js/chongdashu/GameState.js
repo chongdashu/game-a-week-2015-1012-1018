@@ -33,6 +33,7 @@ var p = GameState.prototype;
         this.createBackground();
         this.createGround();
         this.createPlayer();
+        this.createEnemy();
         this.createSystems();
         this.createDebug();
     };
@@ -43,6 +44,21 @@ var p = GameState.prototype;
 
         //  Set the world (global) gravity
         this.game.physics.arcade.gravity.y = GLOBAL_GRAVITY;
+    };
+
+    p.createEnemy = function() {
+        var enemy = this.enemyGroup.create(-160+32, -96, "enemy");
+        enemy.anchor.set(0.5, 0.5);
+        enemy.animations.add("idle", [0,1], 4, true);
+        enemy.animations.add("death", [1,2,3,4,5], 24);
+        enemy.animations.play("idle");
+
+        this.game.physics.arcade.enable(enemy);
+
+        enemy.body.collideWorldBounds = true;
+        enemy.body.allowGravity = false;
+        enemy.body.bounce.set(1,0);
+        enemy.body.velocity.set(50,0);
     };
 
     p.createPlayer = function() {
@@ -73,6 +89,7 @@ var p = GameState.prototype;
         this.backgroundGroup = this.game.add.group();
         this.groundGroup = this.game.add.group();
         this.agentGroup = this.game.add.group();
+        this.enemyGroup = this.game.add.group();
     };
 
     p.createBackground = function() {

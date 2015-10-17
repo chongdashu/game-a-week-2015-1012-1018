@@ -73,6 +73,15 @@ var p = MenuState.prototype;
         game.canvas.style['width'] = '640px';
         game.canvas.style['height'] = '480px';
         pixel.canvas.style['display'] = 'none';
+
+        this.game.input.keyboard.onDownCallback = function() {
+            game.canvas.style['display'] = 'none';
+            pixel.canvas.style['display'] = '';
+            game.canvas.style['width'] = '';
+            game.canvas.style['height'] = '';
+            this.game.state.start("GameState");
+            this.game.input.keyboard.onDownCallback = null;
+        };
     };
 
     // @phaser
@@ -84,6 +93,7 @@ var p = MenuState.prototype;
             game.canvas.style['width'] = '';
             game.canvas.style['height'] = '';
             this.game.state.start("GameState");
+            this.game.input.keyboard.onDownCallback = null;
         }
     };
 

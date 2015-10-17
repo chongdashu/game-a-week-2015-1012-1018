@@ -25,6 +25,9 @@ var p = chongdashu.Utils.extend(MovementSystem, chongdashu.System);
 
     p.doJump = false;
 
+    p.leftDownAccum = 0;
+    p.rightDownAccum = 0;
+
     p.init = function(state)
     {
         console.log("[MovementSystem], init()");
@@ -43,12 +46,30 @@ var p = chongdashu.Utils.extend(MovementSystem, chongdashu.System);
 
             if (!ac.arrow && this.game.time.time - ac.arrowReleaseTime > 350) {
                 if (kc.isDown(Phaser.Keyboard.LEFT)) {
-                    sprite.body.velocity.x = -GLOBAL_MOVEMENT_SPEED;
-                    sprite.body.facingX = Phaser.LEFT;
+                    if (this.leftDownAccum >= 50) {
+                        sprite.body.velocity.x = -GLOBAL_MOVEMENT_SPEED;
+                        sprite.body.facingX = Phaser.LEFT;
+                    }
+                    else {
+                        this.leftDownAccum += this.game.time.elapsed;
+                    }
+                    
                 }
                 if (kc.isDown(Phaser.Keyboard.RIGHT)) {
-                    sprite.body.velocity.x = GLOBAL_MOVEMENT_SPEED;
-                    sprite.body.facingX = Phaser.RIGHT;
+                    if (this.rightDownAccum >= 50) {
+                        sprite.body.velocity.x = GLOBAL_MOVEMENT_SPEED;
+                        sprite.body.facingX = Phaser.RIGHT;
+                    }
+                    else {
+                        this.rightDownAccum += this.game.time.elapsed;
+                    }
+                }
+
+                if (kc.isUp(Phaser.Keyboard.LEFT)) {
+                    this.leftDownAccum = 0;
+                }
+                if (kc.isUp(Phaser.Keyboard.RIGHT)) {
+                    this.rightDownAccum = 0;
                 }
             }
             
