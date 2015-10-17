@@ -62,7 +62,47 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
     };
 
     p.onArrowEnemyCollide = function(arrow, enemy) {
+        if (arrow.checkWorldBounds && arrow.outOfBoundsKill) {
+            arrow.checkWorldBounds = false;
+            arrow.outOfBoundsKill = false;
 
+            arrow.body.velocity.set(0,0);
+            arrow.body.bounce.set(0,0.2);
+            arrow.body.angularVelocity = 720;
+        }
+    };
+
+    p.onArrowGroundCollide = function( arrow, ground) {
+        if (arrow.body.angularVelocity !== 0) {
+
+            arrow.body.angularVelocity = 0;
+            arrow.scale.set(1,1);
+            arrow.rotation = Math.PI/2;
+
+            // tween
+            // -----
+
+            var squashTween = this.game.add.tween(arrow.scale).to({
+                x: 1.25,
+                y: 0.75
+            }, 80, Phaser.Easing.Exponential.Out);
+
+            var squeezeTween  = this.game.add.tween(arrow.scale).to({
+                x: 1,
+                y: 1
+            }, 80, Phaser.Easing.Exponential.InOut);
+
+            squashTween.chain(squeezeTween);
+
+            squashTween.start();
+
+            squashTween.onComplete.add(function() {
+                arrow.rotation = Math.PI/2;
+                console.log("arrow.body.angle=%s", arrow.body.angle);
+            });
+
+           
+        }
     };
 
     p.update = function(entity) {

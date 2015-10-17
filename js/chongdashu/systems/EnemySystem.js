@@ -41,13 +41,21 @@ var p = chongdashu.Utils.extend(EnemySystem, chongdashu.System);
 
     p.onArrowEnemyCollide = function(arrow, enemy) {
 
-        // juice: sleep
+        // handle enemy
+        // ------------
+        
         if (enemy.animations.currentAnim.name !== "kill") {
             var timer = this.game.time.create(true);
             // enemy.body.allowGravity = true;
             enemy.body.immovable = true;
             enemy.body.velocity.set(0,0);
             this.game.physics.arcade.isPaused = true;
+
+            var auc = enemy.komponents[chongdashu.AudioComponent.TYPE];
+            if (auc) {
+                auc.play("enemy-hurt");
+            }
+
             timer.add(this.game.rnd.between(50,55), function() {
                 // animation
                 enemy.animations.play("kill", null, null, true);
@@ -55,7 +63,6 @@ var p = chongdashu.Utils.extend(EnemySystem, chongdashu.System);
 
                 console.log(enemy);
 
-                var auc = enemy.komponents[chongdashu.AudioComponent.TYPE];
                 if (auc) {
                     auc.play("enemy-kill");
                 }

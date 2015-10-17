@@ -162,6 +162,15 @@ var p = GameState.prototype;
         if (this.arrowGroup && this.enemyGroup) {
             this.game.physics.arcade.collide(this.arrowGroup, this.enemyGroup, this.onArrowEnemyCollide, null, this);
         }
+        if (this.arrowGroup && this.enemyGroup) {
+            this.game.physics.arcade.collide(this.arrowGroup, this.groundGroup, null, this.onArrowGroundCollide, this);
+        }
+    };
+
+    p.onArrowGroundCollide = function(arrow, ground) {
+        if (this.arrowShootingSystem) {
+            this.arrowShootingSystem.onArrowGroundCollide(arrow,ground);
+        }
     };
 
     p.onAgentGroundCollide = function(agent, ground) {
