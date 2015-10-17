@@ -174,6 +174,7 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
 
                     // remove arrow from component
                     ac.arrow = null;
+                    ac.arrowReleaseTime = this.game.time.time;
 
 
                 }

@@ -41,7 +41,7 @@ var p = chongdashu.Utils.extend(MovementSystem, chongdashu.System);
             var kc = sprite.komponents[chongdashu.KeyboardComponent.TYPE];
             var ac = sprite.komponents[chongdashu.AimingComponent.TYPE];
 
-            if (!ac.arrow) {
+            if (!ac.arrow && this.game.time.time - ac.arrowReleaseTime > 350) {
                 if (kc.isDown(Phaser.Keyboard.LEFT)) {
                     sprite.body.velocity.x = -GLOBAL_MOVEMENT_SPEED;
                     sprite.body.facingX = Phaser.LEFT;
@@ -53,27 +53,6 @@ var p = chongdashu.Utils.extend(MovementSystem, chongdashu.System);
             }
             
             
-        }
-    };
-
-    p.onAgentGroundCollide = function(agent, ground) {
-        if (agent.body.touching.down && !agent.groundTween && agent.isJumping) {
-            agent.anchor.set(0.5,1.0);
-            agent.y += 32;
-            var squashTween = this.game.add.tween(agent.scale).to({
-                x: 1.25,
-                y: 0.75
-            }, 125, Phaser.Easing.Exponential.Out, true);
-            agent.groundTween = squashTween;
-
-            squashTween.onComplete.add(function() {
-                agent.anchor.set(0.5);
-                agent.position.y -= 32;
-                agent.groundTween = null;
-                agent.isJumping = false;
-            });
-
-            squashTween.yoyo(true);
         }
     };
 
