@@ -61,6 +61,10 @@
                         output += "arrowGroup.length=" + state.arrowGroup.length;
                         output += "<br>";
                     }
+                    if (state.enemySpawnTimer) {
+                        output += "enemySpawnTimer.duration=" + state.enemySpawnTimer.duration;
+                        output += "<br>";
+                    };
                 }
 
                 $("#debug").html(output);

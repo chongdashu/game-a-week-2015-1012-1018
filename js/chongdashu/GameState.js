@@ -38,6 +38,7 @@ var p = GameState.prototype;
         this.createSystems();
         this.createDebug();
         this.createAudio();
+        this.createTimers();
     };
 
     p.createAudio = function() {
@@ -53,7 +54,9 @@ var p = GameState.prototype;
     };
 
     p.createEnemy = function() {
-        var enemy = this.enemyGroup.create(-160+32, -96, "enemy");
+        var enemyX = this.game.rnd.between(-GLOBAL_GAME_WIDTH/2, GLOBAL_GAME_WIDTH/2);
+        var enemyY = this.game.rnd.between(-GLOBAL_GAME_HEIGHT/2+32, GLOBAL_GAME_HEIGHT/2-64);
+        var enemy = this.enemyGroup.create(enemyX, enemyY, "enemy");
         enemy.anchor.set(0.5, 0.5);
         
         var enemyIdleAnim = enemy.animations.add("idle", [0,1], 4, true);
@@ -149,10 +152,27 @@ var p = GameState.prototype;
         this.game.add.image(-GLOBAL_GAME_WIDTH/2, -GLOBAL_GAME_HEIGHT/2, bitmap);
     };
 
+    p.createTimers = function() {
+        this.enemySpawnTimer = this.game.time.create(false);
+        this.enemySpawnTimer.loop(this.game.rnd.between(1000,2500), function() {
+            var nEnemies = this.game.rnd.weightedPick([1,2,3]);
+            for (var i=0; i < nEnemies; i++) {
+                this.createEnemy();
+            }
+            
+        }, this);
+        this.enemySpawnTimer.start();
+    };
+
     // @phaser
     p.update = function() {
         this.updatePhysics();
         this.updateSystems();
+        this.updateWorld();
+    };
+
+    p.updateWorld = function() {
+
     };
 
     p.updatePhysics = function() {
