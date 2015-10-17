@@ -117,7 +117,9 @@ var p = GameState.prototype;
     };
 
     p.updatePhysics = function() {
-        this.game.physics.arcade.collide(this.agentGroup, this.groundGroup, this.onAgentGroundCollide, null, this);
+        if (this.agentGroup && this.groundGroup) {
+            this.game.physics.arcade.collide(this.agentGroup, this.groundGroup, this.onAgentGroundCollide, null, this);
+        }
     };
 
     p.onAgentGroundCollide = function(agent, ground) {
@@ -128,14 +130,17 @@ var p = GameState.prototype;
 
     p.updateSystems = function() {
         var self = this;
-        self.agentGroup.forEach(function(agent) {
-            $.each(agent.komponents, function(key, component) {
-                component.update();
+        if (self.agentGroup) {
+            self.agentGroup.forEach(function(agent) {
+                $.each(agent.komponents, function(key, component) {
+                    component.update();
+                });
+                $.each(self.systems, function(index, system) {
+                    system.update(agent);
+                });
             });
-            $.each(self.systems, function(index, system) {
-                system.update(agent);
-            });
-        });
+        }
+        
        
     };
 

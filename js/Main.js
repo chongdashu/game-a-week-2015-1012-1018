@@ -25,13 +25,14 @@ $(document).ready(function() {
     // --------------------------
     // for retro, always use Phaser.CANVAS
     // http://www.photonstorm.com/phaser/pixel-perfect-scaling-a-phaser-game
-    game = new Phaser.Game(GLOBAL_GAME_WIDTH, GLOBAL_GAME_HEIGHT, Phaser.CANVAS, "");
+    game = new Phaser.Game(GLOBAL_GAME_WIDTH, GLOBAL_GAME_HEIGHT, Phaser.CANVAS, "", null, false, false);
 
     // Add all states.
     // ---------------
     game.state.add("BootState", chongdashu.BootState);
     game.state.add("PreloadState", chongdashu.PreloadState);
     game.state.add("GameState", chongdashu.GameState);
+    game.state.add("MenuState", chongdashu.MenuState);
 
     // Start with boot sequence.
     // -------------------------
