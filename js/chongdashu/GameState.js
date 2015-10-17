@@ -246,7 +246,7 @@ var p = GameState.prototype;
         $.each(this.systems, function(index, system) {
              system.render();
         });
-        this.game.debug.cameraInfo(game.camera, 32, 32);
+        // this.game.debug.cameraInfo(game.camera, 32, 32);
         pixel.context.drawImage(game.canvas, 0, 0, game.width, game.height, 0, 0, pixel.width, pixel.height);
     };
 

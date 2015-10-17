@@ -60,7 +60,7 @@ var p = chongdashu.Utils.extend(EnemySystem, chongdashu.System);
             }
             
             if (this.state.screenShake) {
-                this.state.screenShake.shake(10);
+                this.state.screenShake.shake(this.game.rnd.integerInRange(10,15));
             }
 
             timer.add(this.game.rnd.between(50,55), function() {
