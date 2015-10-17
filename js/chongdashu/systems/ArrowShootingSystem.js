@@ -62,6 +62,7 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
 
             var kc = entity.komponents[chongdashu.KeyboardComponent.TYPE];
             var ac = entity.komponents[chongdashu.AimingComponent.TYPE];
+            var auc = entity.komponents[chongdashu.AudioComponent.TYPE];
 
             kc.initKey(Phaser.Keyboard.X);
 
@@ -173,6 +174,13 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
                         // animation
                         arrow.animations.play("shoot");
                         self.game.physics.arcade.isPaused = false;
+
+                        // audio
+                        // -----
+                        if (auc) {
+                            var shootNumber = self.game.rnd.integerInRange(1,1);
+                            auc.play("shoot-" + shootNumber.toString());
+                        }
                     });
                     timer.start();
 

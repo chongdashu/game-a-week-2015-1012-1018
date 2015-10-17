@@ -36,6 +36,11 @@ var p = GameState.prototype;
         this.createEnemy();
         this.createSystems();
         this.createDebug();
+        this.createAudio();
+    };
+
+    p.createAudio = function() {
+
     };
 
     p.createPhysics = function() {
@@ -76,6 +81,7 @@ var p = GameState.prototype;
 
         new chongdashu.KeyboardComponent(this.game.input.keyboard).addTo(this.player);
         new chongdashu.AimingComponent(this.player).addTo(this.player);
+        new chongdashu.AudioComponent(this.game).addTo(this.player);
 
     };
 

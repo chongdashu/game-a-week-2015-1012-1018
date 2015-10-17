@@ -50,6 +50,11 @@ var p = PreloadState.prototype;
         this.game.load.image("player", "res/player.png");
         this.game.load.spritesheet("arrow", "res/arrow.png", 32, 32);
         this.game.load.spritesheet("enemy", "res/enemy.png", 32, 32);
+        this.game.load.audio("jump", "res/jump.wav");
+        this.game.load.audio("shoot-1", "res/shoot-1.wav");
+        this.game.load.audio("shoot-2", "res/shoot-2.wav");
+        this.game.load.audio("shoot-3", "res/shoot-3.wav");
+        this.game.load.audio("shoot-4", "res/shoot-4.wav");
        
     };
 

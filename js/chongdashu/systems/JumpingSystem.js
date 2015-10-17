@@ -63,6 +63,13 @@ var p = chongdashu.Utils.extend(JumpingSystem, chongdashu.System);
                             sprite.scale.set(1,1);
                             
                         });
+
+                        // audio
+                        // -----
+                        var ac = sprite.komponents[chongdashu.AudioComponent.TYPE];
+                        if (ac) {
+                            ac.play("jump");
+                        }
                     });
                     self.doJump =false;
                 }
