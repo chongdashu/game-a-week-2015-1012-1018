@@ -43,7 +43,7 @@ var p = chongdashu.Utils.extend(EnemySystem, chongdashu.System);
 
         // handle enemy
         // ------------
-        
+
         if (enemy.animations.currentAnim.name !== "kill") {
             var timer = this.game.time.create(true);
             // enemy.body.allowGravity = true;
@@ -54,6 +54,13 @@ var p = chongdashu.Utils.extend(EnemySystem, chongdashu.System);
             var auc = enemy.komponents[chongdashu.AudioComponent.TYPE];
             if (auc) {
                 auc.play("enemy-hurt");
+            }
+            if (this.state.juicy) {
+                this.state.juicy.createScreenFlash("0xffffff");
+            }
+            
+            if (this.state.screenShake) {
+                this.state.screenShake.shake(10);
             }
 
             timer.add(this.game.rnd.between(50,55), function() {

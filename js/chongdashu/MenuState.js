@@ -79,6 +79,7 @@ var p = MenuState.prototype;
             pixel.canvas.style['display'] = '';
             game.canvas.style['width'] = '';
             game.canvas.style['height'] = '';
+            
             this.game.state.start("GameState");
             this.game.input.keyboard.onDownCallback = null;
         };
@@ -92,6 +93,7 @@ var p = MenuState.prototype;
             pixel.canvas.style['display'] = '';
             game.canvas.style['width'] = '';
             game.canvas.style['height'] = '';
+
             this.game.state.start("GameState");
             this.game.input.keyboard.onDownCallback = null;
         }

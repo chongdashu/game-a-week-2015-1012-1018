@@ -33,6 +33,8 @@ var p = PreloadState.prototype;
             -GLOBAL_GAME_HEIGHT/2,
             GLOBAL_GAME_WIDTH, GLOBAL_GAME_HEIGHT);
 
+        // this.game.camera.bounds.setTo(-GLOBAL_GAME_WIDTH/2, -GLOBAL_GAME_HEIGHT/2, GLOBAL_GAME_WIDTH*2, GLOBAL_GAME_HEIGHT*2);
+
         this.loadingFrame = this.game.add.sprite(0,0, "preloader-frame");
         this.loadingBar = this.game.add.sprite(0,0, "preloader-bar");
         this.loadingText = this.game.add.text(0,0, "Loading: 0%", { font: "16pt Garamond", align: "center", fill : "#FFFFFF", stroke : "black", strokeThickness: 1});

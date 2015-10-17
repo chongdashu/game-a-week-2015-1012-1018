@@ -24,7 +24,7 @@ var p = GameState.prototype;
     
     // @phaser
     p.preload = function() {
-       
+        
     };
 
     // @phaser
@@ -39,10 +39,23 @@ var p = GameState.prototype;
         this.createDebug();
         this.createAudio();
         this.createTimers();
+        this.createPlugins();
     };
 
     p.createAudio = function() {
 
+    };
+
+    p.createPlugins = function() {
+        // this.juicy = this.game.plugins.add(new Phaser.Plugin.Juicy(this));
+        this.screenShake = this.game.plugins.add(new Phaser.Plugin.ScreenShake(this));
+        this.screenShake.setup({
+            cameraOffsetX : -GLOBAL_GAME_WIDTH/2,
+            cameraOffsetY : -GLOBAL_GAME_HEIGHT/2
+        });
+
+        this.game.camera.setPosition(-GLOBAL_GAME_WIDTH/2, -GLOBAL_GAME_HEIGHT/2);
+        this.game.camera.setSize(GLOBAL_GAME_WIDTH, GLOBAL_GAME_HEIGHT);
     };
 
     p.createPhysics = function() {
@@ -169,6 +182,10 @@ var p = GameState.prototype;
         this.updatePhysics();
         this.updateSystems();
         this.updateWorld();
+        this.updatePlugins();
+    };
+
+    p.updatePlugins = function() {
     };
 
     p.updateWorld = function() {
@@ -229,6 +246,7 @@ var p = GameState.prototype;
         $.each(this.systems, function(index, system) {
              system.render();
         });
+        this.game.debug.cameraInfo(game.camera, 32, 32);
         pixel.context.drawImage(game.canvas, 0, 0, game.width, game.height, 0, 0, pixel.width, pixel.height);
     };
 

@@ -57,12 +57,10 @@ var p = BootState.prototype;
 
         // this.game.stage.backgroundColor = '#FFFFFF';
 
-         this.game.world.setBounds(
-            -GLOBAL_GAME_WIDTH/2,
-            -GLOBAL_GAME_HEIGHT/2,
-            GLOBAL_GAME_WIDTH, GLOBAL_GAME_HEIGHT);
-
-
+         // this.game.world.setBounds(
+         //    -GLOBAL_GAME_WIDTH/2,
+         //    -GLOBAL_GAME_HEIGHT/2,
+         //    GLOBAL_GAME_WIDTH, GLOBAL_GAME_HEIGHT);
 
         //  Unless you specifically know your game needs to support multi-touch I would recommend setting this to 1
         this.game.input.maxPointers = 1;
