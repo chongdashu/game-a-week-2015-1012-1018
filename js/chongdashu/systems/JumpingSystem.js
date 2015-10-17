@@ -9,14 +9,14 @@ this.chongdashu = this.chongdashu||{};
     "use strict";
 
 /**
- * SpriteMovementSystem
- * @class SpriteMovementSystem
+ * JumpingSystem
+ * @class JumpingSystem
  * @constructor
  **/
-var SpriteMovementSystem = function(state) {
+var JumpingSystem = function(state) {
     this.init(state);
 };
-var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
+var p = chongdashu.Utils.extend(JumpingSystem, chongdashu.System);
 
     p.keyStates = {};
 
@@ -27,7 +27,7 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
 
     p.init = function(state)
     {
-        console.log("[SpriteMovementSystem], init()");
+        console.log("[JumpingSystem], init()");
         this.System_init(state);
 
         this.addComponent(chongdashu.KeyboardComponent.TYPE);
@@ -39,7 +39,7 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
             var sprite = entity;
             var kc = sprite.komponents[chongdashu.KeyboardComponent.TYPE];
             
-            if (kc.isDown(Phaser.Keyboard.W) && !kc.isJustDown(Phaser.Keyboard.W)) {
+            if (kc.isDown(Phaser.Keyboard.Z) && !kc.isJustDown(Phaser.Keyboard.Z)) {
                 
                 if (self.doJump) {
                     var squashTween = this.game.add.tween(sprite.scale).to({
@@ -68,7 +68,7 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
                 }
             }
 
-            if (kc.isJustDown(Phaser.Keyboard.W)) {
+            if (kc.isJustDown(Phaser.Keyboard.Z)) {
 
                 if (sprite.isJumping && sprite.groundTween) {
 
@@ -90,15 +90,6 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
                     }
                 }
                 
-            }
-
-            if (kc.isDown(Phaser.Keyboard.A)) {
-                sprite.body.velocity.x = -GLOBAL_MOVEMENT_SPEED;
-                sprite.body.facingX = Phaser.LEFT;
-            }
-            if (kc.isDown(Phaser.Keyboard.D)) {
-                sprite.body.velocity.x = GLOBAL_MOVEMENT_SPEED;
-                sprite.body.facingX = Phaser.RIGHT;
             }
         }
     };
@@ -125,7 +116,7 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
     };
 
     p.render = function() {
-        // console.log("[SpriteMovementSystem], render()");
+        // console.log("[JumpingSystem], render()");
         this.System_render();
         // p.game.debug.spriteInfo(this.state.player, 16, 16);
         // p.game.debug.body(this.state.player);
@@ -135,7 +126,7 @@ var p = chongdashu.Utils.extend(SpriteMovementSystem, chongdashu.System);
 
 // Link
 // ----
-chongdashu.SpriteMovementSystem = chongdashu.Utils.promote(SpriteMovementSystem, "System");
+chongdashu.JumpingSystem = chongdashu.Utils.promote(JumpingSystem, "System");
 
 }());
 

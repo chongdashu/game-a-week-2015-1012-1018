@@ -22,8 +22,8 @@ Component.prototype.constructor = Component;
     p.componentType = null;
     p.entity = null;
 
-    Component.add = function (entity, componentType)  {
-
+    Component.entityContains = function (entity, componentType)  {
+        return entity.komponents && compoentType in entity.komponents;
     };
 
     p.init = function(entity, componentType)

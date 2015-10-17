@@ -28,7 +28,6 @@ var p = chongdashu.Utils.extend(KeyboardComponent, chongdashu.Component);
 
     p.keyStates = null;
     p.keyboard = null;
-    p.lastUpdateId = null;
 
     p.init = function(entity)
     {
@@ -36,13 +35,16 @@ var p = chongdashu.Utils.extend(KeyboardComponent, chongdashu.Component);
         this.Component_init(entity, KeyboardComponent.TYPE);
         this.keyStates = {};
         this.keyboard = entity;
-        this.lastUpdateId = -1;
 
-        this.initKey(Phaser.Keyboard.W);
-        this.initKey(Phaser.Keyboard.A);
-        this.initKey(Phaser.Keyboard.S);
-        this.initKey(Phaser.Keyboard.D);
-        this.initKey(Phaser.Keyboard.SPACEBAR);
+        // this.initKey(Phaser.Keyboard.W);
+        // this.initKey(Phaser.Keyboard.A);
+        // this.initKey(Phaser.Keyboard.S);
+        // this.initKey(Phaser.Keyboard.D);
+        // this.initKey(Phaser.Keyboard.SPACEBAR);
+        // this.initKey(Phaser.Keyboard.Z);
+        // this.initKey(Phaser.Keyboard.X);
+        // this.initKey(Phaser.Keyboard.LEFT);
+        // this.initKey(Phaser.Keyboard.RIGHT);
     };
 
     p.initKey = function(keycode) {
@@ -52,18 +54,22 @@ var p = chongdashu.Utils.extend(KeyboardComponent, chongdashu.Component);
     };
 
     p.isJustDown = function(keycode) {
+        this.initKey(keycode);
         return this.keyStates[keycode] && (this.keyStates[keycode] === KeyboardComponent.JUST_DOWN);
     };
 
     p.isDown = function(keycode) {
+        this.initKey(keycode);
         return this.keyStates[keycode] && (this.isJustDown(keycode) || (this.keyStates[keycode] === KeyboardComponent.DOWN));
     };
 
     p.isJustUp = function(keycode) {
+        this.initKey(keycode);
         return this.keyStates[keycode] && (this.keyStates[keycode] === KeyboardComponent.JUST_UP);
     };
 
     p.isUp = function(keycode) {
+        this.initKey(keycode);
         return this.keyStates[keycode] && (this.isJustUp(keycode) || (this.keyStates[keycode] === KeyboardComponent.UP));
     };
 

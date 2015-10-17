@@ -63,12 +63,12 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
             var kc = entity.komponents[chongdashu.KeyboardComponent.TYPE];
             var ac = entity.komponents[chongdashu.AimingComponent.TYPE];
 
-            kc.initKey(Phaser.Keyboard.SPACEBAR);
+            kc.initKey(Phaser.Keyboard.X);
 
             var arrow = null;
 
-            if (kc.isDown(Phaser.Keyboard.SPACEBAR)) {
-                if (kc.isJustDown(Phaser.Keyboard.SPACEBAR)) {
+            if (kc.isDown(Phaser.Keyboard.X)) {
+                if (kc.isJustDown(Phaser.Keyboard.X)) {
                     // Handle arrow creation
                     // ---------------------
                     if (ac.arrow === null) {
@@ -88,30 +88,30 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
                         // arrow.y = entity.y + offsetY;
 
                         if (entity.body.facingX == Phaser.RIGHT) {
-                            if (kc.isJustDown(Phaser.Keyboard.A)) {
+                            if (kc.isJustDown(Phaser.Keyboard.LEFT)) {
                                 entity.body.facingX = Phaser.LEFT;
                             }
-                            else if (kc.isDown(Phaser.Keyboard.D) && kc.isDown(Phaser.Keyboard.W)) {
+                            else if (kc.isDown(Phaser.Keyboard.RIGHT) && kc.isDown(Phaser.Keyboard.UP)) {
                                 arrow.angle = -45;
                             }
-                            else if (kc.isDown(Phaser.Keyboard.D) && kc.isUp(Phaser.Keyboard.W)) {
+                            else if (kc.isDown(Phaser.Keyboard.RIGHT) && kc.isUp(Phaser.Keyboard.UP)) {
                                 arrow.angle = 0;
                             }
-                            else if (kc.isUp(Phaser.Keyboard.D) && kc.isDown(Phaser.Keyboard.W)) {
+                            else if (kc.isUp(Phaser.Keyboard.RIGHT) && kc.isDown(Phaser.Keyboard.UP)) {
                                 arrow.angle = -90;
                             }
                         }
                         else if (entity.body.facingX == Phaser.LEFT) {
-                            if (kc.isJustDown(Phaser.Keyboard.D)) {
+                            if (kc.isJustDown(Phaser.Keyboard.RIGHT)) {
                                 entity.body.facingX = Phaser.RIGHT;
                             }
-                            else if (kc.isDown(Phaser.Keyboard.A) && kc.isDown(Phaser.Keyboard.W)) {
+                            else if (kc.isDown(Phaser.Keyboard.LEFT) && kc.isDown(Phaser.Keyboard.UP)) {
                                 arrow.angle = 45;
                             }
-                            else if (kc.isDown(Phaser.Keyboard.A) && kc.isUp(Phaser.Keyboard.W)) {
+                            else if (kc.isDown(Phaser.Keyboard.LEFT) && kc.isUp(Phaser.Keyboard.UP)) {
                                 arrow.angle = 0;
                             }
-                            else if (kc.isUp(Phaser.Keyboard.A) && kc.isDown(Phaser.Keyboard.W)) {
+                            else if (kc.isUp(Phaser.Keyboard.LEFT) && kc.isDown(Phaser.Keyboard.UP)) {
                                 arrow.angle = 90;
                             }
                         }
@@ -126,7 +126,13 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
                 }
             }
 
-            if (kc.isJustUp(Phaser.Keyboard.SPACEBAR)) {
+            if (ac.arrow && kc.isDown(Phaser.Keyboard.X)) {
+                // position the arrow appropriately according to the entity position
+                ac.arrow.position.x = entity.position.x;
+                ac.arrow.position.y = entity.position.y;
+            }
+
+            if (kc.isJustUp(Phaser.Keyboard.X)) {
 
                 // Handle shooting
                 // ---------------
@@ -171,9 +177,6 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
 
 
                 }
-
-                
-                
 
             }
         }

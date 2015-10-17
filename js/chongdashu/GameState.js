@@ -64,7 +64,8 @@ var p = GameState.prototype;
     };
 
     p.createSystems = function() {
-        // this.systems.push(this.spriteMovementSystem  = new chongdashu.SpriteMovementSystem(this));
+        this.systems.push(this.movementSystem  = new chongdashu.MovementSystem(this));
+        this.systems.push(this.jumpingSystem  = new chongdashu.JumpingSystem(this));
         this.systems.push(this.arrowShootingSystem  = new chongdashu.ArrowShootingSystem(this));
     };
 
@@ -120,8 +121,8 @@ var p = GameState.prototype;
     };
 
     p.onAgentGroundCollide = function(agent, ground) {
-        if (this.spriteMovementSystem) {
-            this.spriteMovementSystem.onAgentGroundCollide(agent,ground);
+        if (this.jumpingSystem) {
+            this.jumpingSystem.onAgentGroundCollide(agent,ground);
         }
     };
 
