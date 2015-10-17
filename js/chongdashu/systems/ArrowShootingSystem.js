@@ -41,6 +41,8 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
         arrow.anchor.set(0.5, 0.5);
         this.game.physics.arcade.enable(arrow);
 
+        new chongdashu.AudioComponent(this.game).addTo(arrow);
+
         arrow.events.onKilled.addOnce(function(arrow) {
             this.arrowGroup.remove(arrow);
         }, this);
@@ -79,9 +81,17 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
             arrow.scale.set(1,1);
             arrow.rotation = Math.PI/2;
 
+            var auc = arrow.komponents[chongdashu.AudioComponent.TYPE];
+            console.log(arrow.komponents);
+            console.log(auc);
+            if (auc) {
+                console.log("ASDASS");
+                auc.play("arrow-ground-hit");
+                
+            }
+
             // tween
             // -----
-
             var squashTween = this.game.add.tween(arrow.scale).to({
                 x: 1.25,
                 y: 0.75
@@ -92,14 +102,12 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
                 y: 1
             }, 80, Phaser.Easing.Exponential.InOut);
 
-            squashTween.chain(squeezeTween);
-
-            squashTween.start();
-
             squashTween.onComplete.add(function() {
                 arrow.rotation = Math.PI/2;
-                console.log("arrow.body.angle=%s", arrow.body.angle);
             });
+
+                        squashTween.chain(squeezeTween);
+            squashTween.start();
 
            
         }

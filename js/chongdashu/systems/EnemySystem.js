@@ -61,8 +61,6 @@ var p = chongdashu.Utils.extend(EnemySystem, chongdashu.System);
                 enemy.animations.play("kill", null, null, true);
                 self.game.physics.arcade.isPaused = false;
 
-                console.log(enemy);
-
                 if (auc) {
                     auc.play("enemy-kill");
                 }
