@@ -111,6 +111,12 @@ var p = chongdashu.Utils.extend(JumpingSystem, chongdashu.System);
             }, 125, Phaser.Easing.Exponential.Out, true);
             agent.groundTween = squashTween;
 
+            if (this.state.groundEmitter) {
+                // particles
+                this.state.groundEmitter.position.set(agent.x, ground.y-16);
+                this.state.groundEmitter.start(true, 500 , null, 10);
+            }
+
             squashTween.onComplete.add(function() {
                 agent.anchor.set(0.5);
                 agent.position.y -= 32;

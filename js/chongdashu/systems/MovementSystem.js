@@ -44,6 +44,8 @@ var p = chongdashu.Utils.extend(MovementSystem, chongdashu.System);
             var kc = sprite.komponents[chongdashu.KeyboardComponent.TYPE];
             var ac = sprite.komponents[chongdashu.AimingComponent.TYPE];
 
+            // BUG:
+            // ac.arrowReleaseTime > 0 will fix #1, but not sure what's best.
             if (!ac.arrow && this.game.time.time - ac.arrowReleaseTime > 350) {
                 if (kc.isDown(Phaser.Keyboard.LEFT)) {
                     if (this.leftDownAccum >= 50) {

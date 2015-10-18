@@ -92,6 +92,12 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
             }
             arrow.enable = false;
 
+            if (this.state.groundEmitter) {
+                // particles
+                this.state.groundEmitter.position.set(arrow.x, ground.y-16);
+                this.state.groundEmitter.start(true, 500 , null, 10);
+            }
+
             // tween
             // -----
             var squashTween = this.game.add.tween(arrow.scale).to({

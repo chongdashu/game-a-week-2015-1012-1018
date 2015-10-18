@@ -49,12 +49,24 @@ var p = GameState.prototype;
         this.enemyEmitter = this.game.add.emitter(-160, -120, 250);
         this.enemyEmitter.enableBody = true;
         this.enemyEmitter.minParticleSpeed.setTo(-250, -400);
-        // this.enemyEmitter.gravity = this.game.physics.arcade.gravity.y;
         this.enemyEmitter.makeParticles("particle");
         this.enemyEmitter.bounce.set(0.1,0.1);
         this.enemyEmitter.forEach(function(particle) {
             particle.tint = "0xFF0000";
         }, this);
+
+        this.groundEmitter = this.game.add.emitter(0, 0, 250);
+        this.groundEmitter.width=16;
+        this.groundEmitter.makeParticles("particle-small");
+        this.groundEmitter.minParticleSpeed.set(-20, -200);
+        // this.groundEmitter.maxParticleSpeed.set(0, 0);
+        this.groundEmitter.enableBody = false;
+        // this.groundEmitter.gravity = -1000;
+        this.groundEmitter.forEach(function(particle) {
+            particle.tint = "0x4c2000";
+        }, this);
+        
+
     };
 
     p.createAudio = function() {

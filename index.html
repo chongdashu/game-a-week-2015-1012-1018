@@ -48,10 +48,12 @@
     </div>
 
     <script>
+
+        var state = null;
         $(document).ready(function() {
             setInterval(function() { 
 
-                var state = game.state.getCurrentState();
+                state = game.state.getCurrentState();
                 var output = "DEBUG<br>";
 
                 if (state) {
@@ -66,7 +68,11 @@
                     if (state.enemySpawnTimer) {
                         output += "enemySpawnTimer.duration=" + state.enemySpawnTimer.duration;
                         output += "<br>";
-                    };
+                    }
+                    if (state.player) {
+                        output += "player.body.facingX=" + (state.player.body.facingX == Phaser.RIGHT ? "RIGHT" : "LEFT");
+                        output += "<br";
+                    }
                 }
 
                 $("#debug").html(output);
