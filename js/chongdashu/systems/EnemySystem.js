@@ -72,10 +72,18 @@ var p = chongdashu.Utils.extend(EnemySystem, chongdashu.System);
                 this.state.screenShake.shake(this.game.rnd.integerInRange(10,15));
             }
 
+            var self = this;
+
             timer.add(this.game.rnd.between(50,55), function() {
                 // animation
                 enemy.animations.play("kill", null, null, true);
                 self.game.physics.arcade.isPaused = false;
+
+                if (self.state.enemyEmitter) {
+                    self.state.enemyEmitter.x = enemy.x;
+                    self.state.enemyEmitter.y = enemy.y;
+                    self.state.enemyEmitter.start(true, 5000, null, self.game.rnd.integerInRange(10,15));
+                }
 
                 if (auc) {
                     auc.play("enemy-kill");

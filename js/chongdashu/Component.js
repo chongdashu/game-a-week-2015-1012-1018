@@ -28,7 +28,6 @@ Component.prototype.constructor = Component;
 
     p.init = function(entity, componentType)
     {
-        console.log("[Component], init()");
         this.entity = entity;
         this.componentType = componentType;
     };
@@ -42,7 +41,6 @@ Component.prototype.constructor = Component;
     };
 
     p.getType = function() {
-        console.log("[Component], getType()");
         return this.componentType;
     };
 

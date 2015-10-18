@@ -38,8 +38,23 @@ var p = GameState.prototype;
         this.createSystems();
         this.createDebug();
         this.createAudio();
+        this.createEmitters();
         this.createTimers();
         this.createPlugins();
+
+        // game.canvas.style['display'] = '';
+    };
+
+    p.createEmitters = function() {
+        this.enemyEmitter = this.game.add.emitter(-160, -120, 250);
+        this.enemyEmitter.enableBody = true;
+        this.enemyEmitter.minParticleSpeed.setTo(-250, -400);
+        // this.enemyEmitter.gravity = this.game.physics.arcade.gravity.y;
+        this.enemyEmitter.makeParticles("particle");
+        this.enemyEmitter.bounce.set(0.1,0.1);
+        this.enemyEmitter.forEach(function(particle) {
+            particle.tint = "0xFF0000";
+        }, this);
     };
 
     p.createAudio = function() {
@@ -232,6 +247,10 @@ var p = GameState.prototype;
         if (this.arrowGroup && this.enemyGroup) {
             this.game.physics.arcade.collide(this.arrowGroup, this.groundGroup, null, this.onArrowGroundCollide, this);
         }
+        if (this.enemyEmitter && this.groundGroup) {
+            this.game.physics.arcade.collide(this.enemyEmitter, this.groundGroup);
+        }
+
     };
 
     p.onArrowGroundCollide = function(arrow, ground) {
@@ -277,6 +296,10 @@ var p = GameState.prototype;
              system.render();
         });
         // this.game.debug.cameraInfo(game.camera, 32, 32);
+        // this.enemyEmitter.forEachAlive(function(particle) {
+              // game.debug.body(particle,'green',false);
+              // game.debug.spriteBounds(particle, 'pink', false);
+        // });
         pixel.context.drawImage(game.canvas, 0, 0, game.width, game.height, 0, 0, pixel.width, pixel.height);
     };
 
