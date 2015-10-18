@@ -63,6 +63,7 @@ var p = PreloadState.prototype;
         this.game.load.audio("enemy-appear-1", "res/enemy-appear-1.wav");
         this.game.load.audio("enemy-appear-2", "res/enemy-appear-2.wav");
         this.game.load.audio("enemy-appear-3", "res/enemy-appear-3.wav");
+        this.game.load.audio("enemy-appear-4", "res/enemy-appear-4.wav");
        
     };
 
