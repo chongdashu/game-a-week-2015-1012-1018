@@ -60,6 +60,9 @@ var p = PreloadState.prototype;
         this.game.load.audio("enemy-kill", "res/enemy-kill.wav");
         this.game.load.audio("enemy-hurt", "res/enemy-hurt.wav");
         this.game.load.audio("arrow-ground-hit", "res/arrow-ground-hit.wav");
+        this.game.load.audio("enemy-appear-1", "res/enemy-appear-1.wav");
+        this.game.load.audio("enemy-appear-2", "res/enemy-appear-2.wav");
+        this.game.load.audio("enemy-appear-3", "res/enemy-appear-3.wav");
        
     };
 

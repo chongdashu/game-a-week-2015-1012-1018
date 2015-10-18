@@ -51,12 +51,21 @@ var p = chongdashu.Utils.extend(EnemySystem, chongdashu.System);
             enemy.body.velocity.set(0,0);
             this.game.physics.arcade.isPaused = true;
 
+            if (!arrow.kills) {
+                arrow.kills = 0;
+            }
+
+            arrow.kills++;
+
             var auc = enemy.komponents[chongdashu.AudioComponent.TYPE];
             if (auc) {
                 auc.play("enemy-hurt");
             }
-            if (this.state.juicy) {
-                this.state.juicy.createScreenFlash("0xffffff");
+            if (this.state.juicy && arrow.kills > 1) {
+                var flash = this.state.juicy.createScreenFlash("");
+                this.game.add.existing(flash);
+                flash.anchor.set(0.5);
+                flash.flash();
             }
             
             if (this.state.screenShake) {

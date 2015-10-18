@@ -34,7 +34,7 @@ var p = GameState.prototype;
         this.createBackground();
         this.createGround();
         this.createPlayer();
-        this.createEnemy();
+        // this.createEnemy();
         this.createSystems();
         this.createDebug();
         this.createAudio();
@@ -47,7 +47,7 @@ var p = GameState.prototype;
     };
 
     p.createPlugins = function() {
-        // this.juicy = this.game.plugins.add(new Phaser.Plugin.Juicy(this));
+        this.juicy = this.game.plugins.add(new Phaser.Plugin.Juicy(this));
         this.screenShake = this.game.plugins.add(new Phaser.Plugin.ScreenShake(this));
         this.screenShake.setup({
             cameraOffsetX : -GLOBAL_GAME_WIDTH/2,
@@ -66,7 +66,7 @@ var p = GameState.prototype;
         this.game.physics.arcade.gravity.y = GLOBAL_GRAVITY;
     };
 
-    p.createEnemy = function() {
+    p.createEnemy = function(i) {
         var enemyX = this.game.rnd.between(-GLOBAL_GAME_WIDTH/2, GLOBAL_GAME_WIDTH/2);
         var enemyY = this.game.rnd.between(-GLOBAL_GAME_HEIGHT/2+32, GLOBAL_GAME_HEIGHT/2-64);
         var enemy = this.enemyGroup.create(enemyX, enemyY, "enemy");
@@ -89,9 +89,33 @@ var p = GameState.prototype;
         enemy.body.bounce.set(1,0);
         enemy.body.velocity.set(50,0);
 
+        enemy.scale.set(0.0,0.0);
+
+        enemy.appearTween = this.game.add.tween(enemy.scale).to({
+            x: 1,
+            y: 1
+        }, 500, Phaser.Easing.Elastic.Out);
+        enemy.appearTween.delay(i * 500);
+        enemy.appearTween.onStart.add(function() {
+            var auc = enemy.komponents[chongdashu.AudioComponent.TYPE];
+            if (auc) {
+                auc.play("enemy-appear-" + (i+1).toString());
+            }
+        });
+        enemy.appearTween.onComplete.add(function() {
+            enemy.appearTween = null;
+            
+        });
+        enemy.appearTween.start();
+
         new chongdashu.EnemyComponent().addTo(enemy);
         new chongdashu.HealthComponent().addTo(enemy);
+        
         new chongdashu.AudioComponent(this.game).addTo(enemy);
+
+        
+
+        return enemy;
     };
 
     p.createPlayer = function() {
@@ -169,9 +193,15 @@ var p = GameState.prototype;
         this.enemySpawnTimer = this.game.time.create(false);
         this.enemySpawnTimer.loop(this.game.rnd.between(1000,2500), function() {
             var nEnemies = this.game.rnd.weightedPick([1,2,3]);
-            for (var i=0; i < nEnemies; i++) {
-                this.createEnemy();
+            var enemy = null;
+            var auc = null;
+            if (this.enemyGroup.length < 5) {
+                for (var i=0; i < nEnemies; i++) {
+                    enemy = this.createEnemy(i);
+                    auc = enemy.komponents[chongdashu.AudioComponent.TYPE];
+                }
             }
+            
             
         }, this);
         this.enemySpawnTimer.start();

@@ -75,6 +75,7 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
     };
 
     p.onArrowGroundCollide = function( arrow, ground) {
+
         if (arrow.body.angularVelocity !== 0) {
 
             arrow.body.angularVelocity = 0;
@@ -89,6 +90,7 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
                 auc.play("arrow-ground-hit");
                 
             }
+            arrow.enable = false;
 
             // tween
             // -----
@@ -102,11 +104,19 @@ var p = chongdashu.Utils.extend(ArrowShootingSystem, chongdashu.System);
                 y: 1
             }, 80, Phaser.Easing.Exponential.InOut);
 
+            var fadeTween =this.game.add.tween(arrow).to({
+                alpha: 0
+            }, 2000);
+
             squashTween.onComplete.add(function() {
                 arrow.rotation = Math.PI/2;
             });
 
-                        squashTween.chain(squeezeTween);
+            fadeTween.onComplete.add(function() {
+                this.arrowGroup.remove(arrow);
+            }, this);
+
+            squashTween.chain(squeezeTween, fadeTween).chain();
             squashTween.start();
 
            
