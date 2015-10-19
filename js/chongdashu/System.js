@@ -20,6 +20,7 @@ var p = System.prototype;
 System.prototype.constructor = System;
     
     p.components = {};
+    p.enabled = false;
 
     p.init = function(state)
     {
@@ -27,9 +28,11 @@ System.prototype.constructor = System;
         this.state = state;
         this.game = state.game;
         this.components = {};
+        this.enabled = true;
     };
 
     p.update = function(entity) {
+
         var containsAllComponents = this.containsKeys(entity, this.components);
         // if (containsAllComponents) {
         //     $.each(entity.komponents, function(key, value) {
@@ -37,7 +40,7 @@ System.prototype.constructor = System;
         //         value.update();
         //     });
         // }
-        return containsAllComponents;
+        return this.enabled && containsAllComponents;
     };
 
     // Credit: http://stackoverflow.com/posts/14368628/revisions

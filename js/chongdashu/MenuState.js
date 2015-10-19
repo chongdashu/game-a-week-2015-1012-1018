@@ -21,11 +21,22 @@ var p = MenuState.prototype;
     // @phaser
     p.preload = function() {
         console.log("[MenuState], preload()");
+        
     };
 
     // @phaser
     p.create = function() {
         console.log("[MenuState], create()");
+
+        // Preloader specific stuff.
+        // -------------------------
+        this.game.world.setBounds(
+            -GLOBAL_GAME_WIDTH/2,
+            -GLOBAL_GAME_HEIGHT/2,
+            GLOBAL_GAME_WIDTH, GLOBAL_GAME_HEIGHT);
+
+        this.game.camera.setPosition(-GLOBAL_GAME_WIDTH/2, -GLOBAL_GAME_HEIGHT/2);
+        this.game.camera.setSize(GLOBAL_GAME_WIDTH, GLOBAL_GAME_HEIGHT);
         
         var titleStyle = {
             font: "bold 24px Consolas",

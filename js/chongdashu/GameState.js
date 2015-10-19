@@ -80,7 +80,7 @@ var p = GameState.prototype;
         this.groundEmitter.enableBody = false;
         // this.groundEmitter.gravity = -1000;
         this.groundEmitter.forEach(function(particle) {
-            particle.tint = "0x4c2000";
+            particle.tint = "0x0fdb6a";
         }, this);
     };
 
@@ -162,8 +162,21 @@ var p = GameState.prototype;
     };
 
     p.createEnemy = function(i) {
-        var enemyX = this.game.rnd.between(-GLOBAL_GAME_WIDTH/2, GLOBAL_GAME_WIDTH/2);
-        var enemyY = this.game.rnd.between(-GLOBAL_GAME_HEIGHT/2+32, GLOBAL_GAME_HEIGHT/2-64);
+        var enemyX = this.game.rnd.pick([-GLOBAL_GAME_WIDTH/2, 0,  GLOBAL_GAME_WIDTH/2]);
+        var enemyY = this.game.rnd.pick([-GLOBAL_GAME_HEIGHT/2+32]);
+
+
+
+        if (this.enemyGroup.length > 3 || this.game.rnd.frac() > 0.75) {
+            enemyY += 48;
+        }
+
+        if (this.game.rnd.frac() > 0.75) {
+            enemyY += 48;
+        }
+
+        enemyX += i * 48;
+
         var enemy = this.enemyGroup.create(enemyX, enemyY, "enemy");
         enemy.anchor.set(0.5, 0.5);
         
@@ -183,6 +196,7 @@ var p = GameState.prototype;
         enemy.body.allowGravity = false;
         enemy.body.bounce.set(1,0);
         enemy.body.velocity.set(50,0);
+        enemy.body.immovable = true;
 
         enemy.scale.set(0.0,0.0);
 
@@ -310,6 +324,7 @@ var p = GameState.prototype;
         this.updatePlugins();
         // this.updateFilters();
 
+
         
     };
     p.updateFilters = function() {
@@ -340,7 +355,73 @@ var p = GameState.prototype;
         if (this.enemyEmitter && this.groundGroup) {
             this.game.physics.arcade.collide(this.enemyEmitter, this.groundGroup);
         }
+        if (this.agentGroup && this.enemyGroup) {
+            this.game.physics.arcade.collide(this.agentGroup, this.enemyGroup, this.onAgentEnemyCollide, null, this);
+        }
 
+        if (this.enemyGroup) {
+            this.game.physics.arcade.collide(this.enemyGroup);
+        }
+
+    };
+
+    p.onAgentEnemyCollide = function(agent, enemy) {
+        var self = this;
+        if (this.game.time.slowMotion === 1.0 && !this.game.physics.arcade.isPaused) {
+            if (this.movementSystem) {
+                this.movementSystem.enabled = false;
+            }
+            if (this.jumpingSystem) {
+                this.jumpingSystem.enabled = false;
+            }
+            if (this.arrowShootingSystem) {
+                this.arrowShootingSystem.enabled = false;
+            }
+
+            if (this.juicy) {
+                var flash = this.juicy.createScreenFlash("red");
+                this.game.add.existing(flash);
+                flash.anchor.set(0.5);
+                flash.flash();
+            }
+
+            // juice: sleep
+            var timer = this.game.time.create(true);
+            this.game.physics.arcade.isPaused = true;
+
+            var hurt = this.game.add.audio("enemy-hurt");
+            hurt.play();
+
+            timer.add(this.game.rnd.between(100,125), function() {
+                var kill = self.game.add.audio("player-kill-2");
+                kill.play();
+                self.game.time.slowMotion = 5.0;
+
+                self.game.physics.arcade.isPaused = false;
+
+                self.player.body.velocity.y = -1500;
+                // this.player.body.gravity = 100;
+                self.player.body.angularVelocity = 720;
+                self.player.collideWorldBounds = false;
+            });
+            timer.start();
+
+            var endtween = this.game.add.tween(this.world).to({
+                "alpha" : 0
+            }, 2000/5, Phaser.Easing.Linear.In, true);
+
+            endtween.onComplete.add(function() {
+                self.game.time.slowMotion = 1.0;
+                self.world.alpha = 1.0;
+                self.game.state.start("MenuState");
+            });
+
+            return true;
+
+        }
+
+        return false;
+        
     };
 
     p.onArrowGroundCollide = function(arrow, ground) {
@@ -350,7 +431,7 @@ var p = GameState.prototype;
     };
 
     p.onAgentGroundCollide = function(agent, ground) {
-        if (this.jumpingSystem) {
+        if (this.jumpingSystem && this.jumpingSystem.enabled) {
             this.jumpingSystem.onAgentGroundCollide(agent,ground);
         }
     };

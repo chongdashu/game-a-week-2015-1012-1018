@@ -37,6 +37,7 @@ var p = chongdashu.Utils.extend(MovementSystem, chongdashu.System);
         this.addComponent(chongdashu.AimingComponent.TYPE);
     };
 
+
     p.update = function(entity) {
         if (this.System_update(entity)) {
             var self = this;

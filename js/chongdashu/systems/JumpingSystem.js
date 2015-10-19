@@ -53,6 +53,13 @@ var p = chongdashu.Utils.extend(JumpingSystem, chongdashu.System);
                         sprite.anchor.set(0.5, 0.5);
                         sprite.position.y -= 32;
                         sprite.body.velocity.y = -GLOBAL_JUMP_SPEED;
+
+                        if (self.state.groundEmitter) {
+                            // particles
+                            self.state.groundEmitter.position.set(sprite.x, sprite.position.y+32);
+                            self.state.groundEmitter.start(true, 500 , null, 10);
+                        }
+
                         var squeezeTween = self.game.add.tween(sprite.scale).to({
                             x: 0.7,
                             y: 1.25
@@ -111,11 +118,7 @@ var p = chongdashu.Utils.extend(JumpingSystem, chongdashu.System);
             }, 125, Phaser.Easing.Exponential.Out, true);
             agent.groundTween = squashTween;
 
-            if (this.state.groundEmitter) {
-                // particles
-                this.state.groundEmitter.position.set(agent.x, ground.y-16);
-                this.state.groundEmitter.start(true, 500 , null, 10);
-            }
+           
 
             squashTween.onComplete.add(function() {
                 agent.anchor.set(0.5);
