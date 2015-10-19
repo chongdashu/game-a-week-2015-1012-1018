@@ -24,7 +24,10 @@ var p = GameState.prototype;
     
     // @phaser
     p.preload = function() {
-        
+        this.game.load.script('invert', 'lib/phaser/filters/pixi/InvertFilter.js');
+        this.game.load.script('displacement', 'lib/phaser/filters/pixi/DisplacementFilter.js');
+        this.game.load.script('gray', 'lib/phaser/filters/Gray.js');
+
     };
 
     // @phaser
@@ -36,13 +39,27 @@ var p = GameState.prototype;
         this.createPlayer();
         // this.createEnemy();
         this.createSystems();
-        this.createDebug();
+        // this.createDebug();
         this.createAudio();
         this.createEmitters();
         this.createTimers();
         this.createPlugins();
+        // this.createFilters();
 
         // game.canvas.style['display'] = '';
+        
+        
+
+            this.count = 0;
+
+
+            // this.background.filters.push(this.vduFilter);
+            // this.background.filters.push(this.displacementFilter);
+
+            // var tween = this.game.add.tween(this.displacementFilter.scale).to({
+            //     x: 0.5,
+            //     y: 0.5
+            // }, 5000, Phaser.Easing.Linear.IN, true);
     };
 
     p.createEmitters = function() {
@@ -65,12 +82,63 @@ var p = GameState.prototype;
         this.groundEmitter.forEach(function(particle) {
             particle.tint = "0x4c2000";
         }, this);
-        
-
     };
 
     p.createAudio = function() {
 
+    };
+
+    p.createFilters = function() {
+        var fragmentSrc = [
+
+                "precision mediump float;",
+
+                "uniform float     time;",
+                "uniform vec2      resolution;",
+                "uniform vec2      mouse;",
+
+                "float noise(vec2 pos) {",
+                    "return fract(sin(dot(pos, vec2(12.9898 - time,78.233 + time))) * 43758.5453);",
+                "}",
+
+                "void main( void ) {",
+
+                    "vec2 normalPos = gl_FragCoord.xy / resolution.xy;",
+                    "float pos = (gl_FragCoord.y / resolution.y);",
+                    "float mouse_dist = length(vec2((mouse.x - normalPos.x) * (resolution.x / resolution.y) , mouse.y - normalPos.y));",
+                    "float distortion = clamp(1.0 - (mouse_dist + 0.1) * 3.0, 0.0, 1.0);",
+
+                    "pos -= (distortion * distortion) * 0.1;",
+
+                    "float c = sin(pos * 400.0) * 0.4 + 0.4;",
+                    "c = pow(c, 0.2);",
+                    "c *= 0.2;",
+
+                    "float band_pos = fract(time * 0.1) * 3.0 - 1.0;",
+                    "c += clamp( (1.0 - abs(band_pos - pos) * 10.0), 0.0, 1.0) * 0.1;",
+
+                    "c += distortion * 0.08;",
+                    "// noise",
+                    "c += (noise(gl_FragCoord.xy) - 0.5) * (0.09);",
+
+
+                    "gl_FragColor = vec4( 0.0, c, 0.0, 1.0 );",
+                "}"
+            ];
+
+            this.vduFilter = new Phaser.Filter(game, null, fragmentSrc);
+            this.vduFilter.setResolution(640, 480);
+
+            // this.invertFilter = game.add.filter("InvertFilter");
+            this.invertFilter = new PIXI.InvertFilter("InvertFilter");
+            this.enemyGroup.filters = [this.invertFilter];
+
+            this.displacementTexture = PIXI.Texture.fromImage("res/displacement.png");
+            this.displacementFilter= new PIXI.DisplacementFilter(this.displacementTexture);
+            // this.displacementFilter.scale = new Phaser.Point(0.5, 0.5);
+
+            this.background.filters = [ this.vduFilter ];
+            this.background.filters = [this.displacementFilter ];
     };
 
     p.createPlugins = function() {
@@ -240,6 +308,16 @@ var p = GameState.prototype;
         this.updateSystems();
         this.updateWorld();
         this.updatePlugins();
+        // this.updateFilters();
+
+        
+    };
+    p.updateFilters = function() {
+        this.vduFilter.update();
+        this.invertFilter.invert = this.game.rnd.between(0.1,0.9);
+        // this.displacementFilter.scale.x = 0.05 * this.count++;
+        // this.displacementFilter.scale.y = 0.05 * this.count++;
+        
     };
 
     p.updatePlugins = function() {

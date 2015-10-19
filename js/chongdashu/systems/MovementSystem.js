@@ -46,7 +46,7 @@ var p = chongdashu.Utils.extend(MovementSystem, chongdashu.System);
 
             // BUG:
             // ac.arrowReleaseTime > 0 will fix #1, but not sure what's best.
-            if (!ac.arrow && this.game.time.time - ac.arrowReleaseTime > 350) {
+            if (!ac.arrow && this.game.time.time - ac.arrowReleaseTime > 50) {
                 if (kc.isDown(Phaser.Keyboard.LEFT)) {
                     if (this.leftDownAccum >= 50) {
                         sprite.body.velocity.x = -GLOBAL_MOVEMENT_SPEED;
