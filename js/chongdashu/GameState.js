@@ -27,6 +27,8 @@ var p = GameState.prototype;
         this.game.load.script('invert', 'lib/phaser/filters/pixi/InvertFilter.js');
         this.game.load.script('displacement', 'lib/phaser/filters/pixi/DisplacementFilter.js');
         this.game.load.script('gray', 'lib/phaser/filters/Gray.js');
+       
+        // this.displacementTexture = PIXI.Texture.fromImage("res/displacement.png");
 
     };
 
@@ -43,10 +45,12 @@ var p = GameState.prototype;
         this.createEmitters();
         this.createTimers();
         this.createPlugins();
-        // this.createFilters();
+        this.createFilters();
         this.createText();
 
         this.remainingGameTime = 60000;
+
+        game.canvas.style['display'] = '';
     };
 
     p.createText = function() {
@@ -146,12 +150,20 @@ var p = GameState.prototype;
             this.invertFilter = new PIXI.InvertFilter("InvertFilter");
             this.enemyGroup.filters = [this.invertFilter];
 
-            this.displacementTexture = PIXI.Texture.fromImage("res/displacement.png");
-            this.displacementFilter= new PIXI.DisplacementFilter(this.displacementTexture);
-            // this.displacementFilter.scale = new Phaser.Point(0.5, 0.5);
+            // this.displacementTexture = PIXI.Sprite.fromImage("res/displacement.png");
+            // this.displacementTexture = this.game.add.image(0,0,"displacement");
+            this.displacementTexture = this.game.make.sprite(0,0,"displacement");
+            this.displacementTexture.anchor.set(0.5, 0.5);
+            this.displacementTexture.texture.scaleMode = 0;
+            this.displacementFilter = new PIXI.DisplacementFilter(this.displacementTexture.texture);
+            this.displacementTexture.texture.scaleMode = 2;
+            this.displacementFilter.scale = new Phaser.Point(1, 1);
+            tmp = this.displacementFilter;
 
-            this.background.filters = [ this.vduFilter ];
-            this.background.filters = [this.displacementFilter ];
+            // this.a = this.game.add.sprite(0,0, "displacement");
+
+            // this.background.filters = [ this.vduFilter ];
+            this.player.filters = [this.displacementFilter];
     };
 
     p.createPlugins = function() {
@@ -345,7 +357,7 @@ var p = GameState.prototype;
         this.updateWorld();
         this.updatePlugins();
         this.updateText();
-        // this.updateFilters();
+        this.updateFilters();
     };
 
     p.updateText = function() {
@@ -356,8 +368,6 @@ var p = GameState.prototype;
     p.updateFilters = function() {
         this.vduFilter.update();
         this.invertFilter.invert = this.game.rnd.between(0.1,0.9);
-        // this.displacementFilter.scale.x = 0.05 * this.count++;
-        // this.displacementFilter.scale.y = 0.05 * this.count++;
         
     };
 
@@ -381,9 +391,9 @@ var p = GameState.prototype;
         if (this.enemyEmitter && this.groundGroup) {
             this.game.physics.arcade.collide(this.enemyEmitter, this.groundGroup);
         }
-        if (this.agentGroup && this.enemyGroup) {
-            this.game.physics.arcade.collide(this.agentGroup, this.enemyGroup, this.onAgentEnemyCollide, null, this);
-        }
+        // if (this.agentGroup && this.enemyGroup) {
+        //     this.game.physics.arcade.collide(this.agentGroup, this.enemyGroup, this.onAgentEnemyCollide, null, this);
+        // }
 
         if (this.enemyGroup) {
             this.game.physics.arcade.collide(this.enemyGroup);

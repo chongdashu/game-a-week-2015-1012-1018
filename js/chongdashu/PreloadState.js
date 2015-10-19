@@ -68,6 +68,7 @@ var p = PreloadState.prototype;
         this.game.load.audio("player-kill-2", "res/player-kill-2.wav");
         this.game.load.image("particle", "res/particle.png");
         this.game.load.image("particle-small", "res/particle-small.png");
+        this.game.load.image("displacement", "res/displacement.png");
        
     };
 

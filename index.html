@@ -45,13 +45,50 @@
 <body style="background-color: #eeeeee">
     <div id="game-container" style="background-color: 0x000000;"></div>
     <div id="debug" style="position: absolute; top: 0; left: 640; background-color: black; color: white; font-family: consolas;">
-
+    
     </div>
 
+    <div id="debug2" style="position: absolute; top: 320; left: 640; background-color: black; color: white; font-family: consolas;">
+        <label id="scaleX">ScaleX</label><br><button id="scaleX-increase" class="btn btn-success">Increase</button><button id="scaleX-decrease"class="btn btn-danger">Decrease</button>
+        <br>
+        <label id="scaleY">ScaleY</label><br><button id="scaleY-increase" class="btn btn-success">Increase</button><button id="scaleY-decrease"class="btn btn-danger">Decrease</button>
+        <br>
+        <label id="offsetX">offsetX</label><br><button id="offsetX-increase" class="btn btn-success">Increase</button><button id="offsetX-decrease"class="btn btn-danger">Decrease</button>
+        <br>
+        <label id="offsetY">offsetY</label><br><button id="offsetY-increase" class="btn btn-success">Increase</button><button id="offsetY-decrease"class="btn btn-danger">Decrease</button>
+
+    </div>
+    
     <script>
 
         var state = null;
         $(document).ready(function() {
+
+            $("#scaleX-increase").click(function() {
+                tmp.scale.x += 1;
+            });
+            $("#scaleY-increase").click(function() {
+                tmp.scale.y += 1;
+            });
+            $("#scaleX-decrease").click(function() {
+                tmp.scale.x -= 1;
+            });
+            $("#scaleY-decrease").click(function() {
+                tmp.scale.y -= 1;
+            });
+
+            $("#offsetX-increase").click(function() {
+                tmp.offset.x += 10;
+            });
+            $("#offsetY-increase").click(function() {
+                tmp.offset.y += 10;
+            });
+            $("#offsetX-decrease").click(function() {
+                tmp.offset.x -= 10;
+            });
+            $("#offsetY-decrease").click(function() {
+                tmp.offset.y -= 10;
+            });
             setInterval(function() { 
 
                 state = game.state.getCurrentState();
@@ -74,10 +111,17 @@
                         output += "player.body.facingX=" + (state.player.body.facingX == Phaser.RIGHT ? "RIGHT" : "LEFT");
                         output += "<br";
                     }
+
+                    if (tmp) {
+                        $("#scaleX").html("scaleX: " + tmp.scale.x);
+                        $("#scaleY").html("scaleY: " + tmp.scale.y);
+
+                        $("#offsetX").html("offsetX: " + tmp.offset.x);
+                        $("#offsetY").html("offsetY: " + tmp.offset.y);
+                    }
                 }
 
                 $("#debug").html(output);
-
 
             }, 500);
         });

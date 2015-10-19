@@ -25,7 +25,7 @@ $(document).ready(function() {
     // --------------------------
     // for retro, always use Phaser.CANVAS
     // http://www.photonstorm.com/phaser/pixel-perfect-scaling-a-phaser-game
-    game = new Phaser.Game(GLOBAL_GAME_WIDTH, GLOBAL_GAME_HEIGHT, Phaser.CANVAS, "", null, false, false);
+    game = new Phaser.Game(GLOBAL_GAME_WIDTH, GLOBAL_GAME_HEIGHT, Phaser.WEBGL, "", null, false, false);
 
     // Add all states.
     // ---------------
