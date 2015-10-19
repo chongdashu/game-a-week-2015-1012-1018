@@ -40,7 +40,7 @@ var p = MenuState.prototype;
         
         var titleStyle = {
             font: "bold 24px Consolas",
-            fill: "ffaabb",
+            fill: "#ffaabb",
             boundsAlignH: "center",
             boundsAlignV: "middle",
             stroke: "black",
