@@ -40,14 +40,14 @@ var p = MenuState.prototype;
         
         var titleStyle = {
             font: "bold 24px Consolas",
-            fill: "aaaabb",
+            fill: "ffaabb",
             boundsAlignH: "center",
             boundsAlignV: "middle",
             stroke: "black",
             strokeThickness: 4
         };
         var subtitleStyle = {
-            font: "18px Consolas",
+            font: "16px Consolas",
             fill: "#aaaabb",
             boundsAlignH: "center",
             boundsAlignV: "middle",
@@ -70,15 +70,27 @@ var p = MenuState.prototype;
             stroke: "black",
             strokeThickness: 1
         };
+        var startStyle = {
+            font: "12px Consolas",
+            fill: "#fefefe",
+            boundsAlignH: "center",
+            boundsAlignV: "middle",
+            stroke: "black",
+            strokeThickness: 1
+        };
 
-        this.titleText = this.game.add.text(0, -64, "One Game A Week", titleStyle);
+        this.titleText = this.game.add.text(0, -64, "Arrow Madness", titleStyle);
         this.titleText.anchor.setTo(0.5, 0.5);
-        this.subtitleText = this.game.add.text(0, -64+32, "Week #1", subtitleStyle);
+        this.subtitleText = this.game.add.text(0, -64+32, "#OGAW-1", subtitleStyle);
         this.subtitleText.anchor.setTo(0.5, 0.5);
         this.twitterText = this.game.add.text(0, 0, "@chongdashu", twitterText);
         this.twitterText.anchor.setTo(0.5, 0.5);
-        this.subtitleText = this.game.add.text(0, +64, "Click Anywhere To Begin", instructionStyle);
-        this.subtitleText.anchor.setTo(0.5, 0.5);
+        
+        this.startText = this.game.add.text(0, +96, "Click Anywhere To Begin", instructionStyle);
+        this.startText.anchor.setTo(0.5, 0.5);
+        
+        this.instructionsText = this.game.add.text(0, +64, "Z: To Jump | X: to Shoot | Arrows: to Move", startStyle);
+        this.instructionsText.anchor.setTo(0.5, 0.5);
 
         game.canvas.style['display'] = '';
         game.canvas.style['width'] = '640px';

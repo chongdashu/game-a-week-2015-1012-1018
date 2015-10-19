@@ -44,10 +44,12 @@ var p = GameState.prototype;
         this.createTimers();
         this.createPlugins();
         // this.createFilters();
-        this.createScoreText();
+        this.createText();
+
+        this.remainingGameTime = 60000;
     };
 
-    p.createScoreText = function() {
+    p.createText = function() {
         var titleStyle = {
             font: "12pt Consolas",
             fill: "white",
@@ -56,8 +58,21 @@ var p = GameState.prototype;
             stroke: "black",
             strokeThickness: 2
         };
+
+        var remainingStyle = {
+            font: "12pt Consolas",
+            fill: "white",
+            boundsAlignH: "center",
+            boundsAlignV: "middle",
+            stroke: "black",
+            strokeThickness: 2
+        };
+
         this.scoreText = this.game.add.text(GLOBAL_GAME_WIDTH/2-64, -GLOBAL_GAME_HEIGHT/2 + 32, "Score", titleStyle);
         this.scoreText.anchor.setTo(0.5, 0.5);
+
+        this.remainingTimeText = this.game.add.text(0, +GLOBAL_GAME_HEIGHT/2 - 8, "Time Remaining", remainingStyle);
+        this.remainingTimeText.anchor.setTo(0.5, 0.5);
     };
 
     p.createEmitters = function() {
@@ -162,8 +177,6 @@ var p = GameState.prototype;
     p.createEnemy = function(i) {
         var enemyX = this.game.rnd.pick([-GLOBAL_GAME_WIDTH/2, 0,  GLOBAL_GAME_WIDTH/2]);
         var enemyY = this.game.rnd.pick([-GLOBAL_GAME_HEIGHT/2+32]);
-
-
 
         if (this.enemyGroup.length > 3 || this.game.rnd.frac() > 0.75) {
             enemyY += 48;
@@ -313,6 +326,16 @@ var p = GameState.prototype;
             
         }, this);
         this.enemySpawnTimer.start();
+
+        this.gameTimer = this.game.time.create(true);
+        this.gameTimer.loop(1000, function() {
+            this.remainingGameTime -= 1000;
+            if (this.remainingGameTime <= 0) {
+                this.onAgentEnemyCollide();
+                this.gameTimer.stop();
+            }
+        }, this);
+        this.gameTimer.start();
     };
 
     // @phaser
@@ -321,12 +344,13 @@ var p = GameState.prototype;
         this.updateSystems();
         this.updateWorld();
         this.updatePlugins();
-        this.updateScoreText();
+        this.updateText();
         // this.updateFilters();
     };
 
-    p.updateScoreText = function() {
+    p.updateText = function() {
         this.scoreText.setText("Score: " + this.enemySystem.enemiesKilled);
+        this.remainingTimeText.setText(this.remainingGameTime/1000 + "s remaining...");
     };
 
     p.updateFilters = function() {
