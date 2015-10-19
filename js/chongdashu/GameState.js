@@ -37,7 +37,6 @@ var p = GameState.prototype;
         this.createBackground();
         this.createGround();
         this.createPlayer();
-        // this.createEnemy();
         this.createSystems();
         // this.createDebug();
         this.createAudio();
@@ -45,21 +44,20 @@ var p = GameState.prototype;
         this.createTimers();
         this.createPlugins();
         // this.createFilters();
+        this.createScoreText();
+    };
 
-        // game.canvas.style['display'] = '';
-        
-        
-
-            this.count = 0;
-
-
-            // this.background.filters.push(this.vduFilter);
-            // this.background.filters.push(this.displacementFilter);
-
-            // var tween = this.game.add.tween(this.displacementFilter.scale).to({
-            //     x: 0.5,
-            //     y: 0.5
-            // }, 5000, Phaser.Easing.Linear.IN, true);
+    p.createScoreText = function() {
+        var titleStyle = {
+            font: "12pt Consolas",
+            fill: "white",
+            boundsAlignH: "center",
+            boundsAlignV: "middle",
+            stroke: "black",
+            strokeThickness: 2
+        };
+        this.scoreText = this.game.add.text(GLOBAL_GAME_WIDTH/2-64, -GLOBAL_GAME_HEIGHT/2 + 32, "Score", titleStyle);
+        this.scoreText.anchor.setTo(0.5, 0.5);
     };
 
     p.createEmitters = function() {
@@ -261,6 +259,7 @@ var p = GameState.prototype;
         this.groups.push(this.agentGroup = this.game.add.group());
         this.groups.push(this.enemyGroup = this.game.add.group());
         this.groups.push(this.arrowGroup = this.game.add.group());
+        this.groups.push(this.textGroup = this.game.add.group());
     };
 
     p.createBackground = function() {
@@ -322,11 +321,14 @@ var p = GameState.prototype;
         this.updateSystems();
         this.updateWorld();
         this.updatePlugins();
+        this.updateScoreText();
         // this.updateFilters();
-
-
-        
     };
+
+    p.updateScoreText = function() {
+        this.scoreText.setText("Score: " + this.enemySystem.enemiesKilled);
+    };
+
     p.updateFilters = function() {
         this.vduFilter.update();
         this.invertFilter.invert = this.game.rnd.between(0.1,0.9);

@@ -17,6 +17,8 @@ var EnemySystem = function(state) {
     this.init(state);
 };
 var p = chongdashu.Utils.extend(EnemySystem, chongdashu.System);
+    
+    p.enemiesKilled = null;
 
     p.init = function(state)
     {
@@ -28,6 +30,8 @@ var p = chongdashu.Utils.extend(EnemySystem, chongdashu.System);
 
         this.addComponent(chongdashu.EnemyComponent.TYPE);
         this.addComponent(chongdashu.HealthComponent.TYPE);
+
+        this.enemiesKilled = 0;
     };
 
     p.update = function(entity) {
@@ -55,13 +59,15 @@ var p = chongdashu.Utils.extend(EnemySystem, chongdashu.System);
                 arrow.kills = 0;
             }
 
+            this.enemiesKilled++;
+
             arrow.kills++;
 
             var auc = enemy.komponents[chongdashu.AudioComponent.TYPE];
             if (auc) {
                 auc.play("enemy-hurt");
             }
-            if (this.state.juicy && arrow.kills > 1) {
+            if (this.state.juicy && (arrow.kills > 1 || this.enemiesKilled % 5 === 0 || this.game.rnd.frac() > 0.8)) {
                 var flash = this.state.juicy.createScreenFlash("");
                 this.game.add.existing(flash);
                 flash.anchor.set(0.5);
