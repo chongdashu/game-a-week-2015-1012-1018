@@ -27,8 +27,8 @@ var p = GameState.prototype;
         this.game.load.script('invert', 'lib/phaser/filters/pixi/InvertFilter.js');
         this.game.load.script('displacement', 'lib/phaser/filters/pixi/DisplacementFilter.js');
         this.game.load.script('gray', 'lib/phaser/filters/Gray.js');
-       
-        // this.displacementTexture = PIXI.Texture.fromImage("res/displacement.png");
+        this.displacementTexture = PIXI.Texture.fromImage('res/displace.png');
+        // this.displacementSprite = PIXI.Texture.fromImage("res/displacement.png");
 
     };
 
@@ -49,8 +49,10 @@ var p = GameState.prototype;
         this.createText();
 
         this.remainingGameTime = 60000;
+        this.displacementTime = 50;
+        this.displacementIndex = 0 ;
 
-        game.canvas.style['display'] = '';
+        // game.canvas.style['display'] = '';
     };
 
     p.createText = function() {
@@ -148,22 +150,48 @@ var p = GameState.prototype;
 
             // this.invertFilter = game.add.filter("InvertFilter");
             this.invertFilter = new PIXI.InvertFilter("InvertFilter");
-            this.enemyGroup.filters = [this.invertFilter];
+            // this.enemyGroup.filters = [this.invertFilter];
 
-            // this.displacementTexture = PIXI.Sprite.fromImage("res/displacement.png");
-            // this.displacementTexture = this.game.add.image(0,0,"displacement");
-            this.displacementTexture = this.game.make.sprite(0,0,"displacement");
-            this.displacementTexture.anchor.set(0.5, 0.5);
-            this.displacementTexture.texture.scaleMode = 0;
-            this.displacementFilter = new PIXI.DisplacementFilter(this.displacementTexture.texture);
-            this.displacementTexture.texture.scaleMode = 2;
-            this.displacementFilter.scale = new Phaser.Point(1, 1);
+            // this.displacementSprite = PIXI.Sprite.fromImage("res/displacement.png");
+            this.displacementSprite = this.game.make.sprite(0,0,"displacement");
+            this.displacementSprite2 = this.game.make.sprite(0,0,"displacement-2");
+            this.displacementSprite3 = this.game.make.sprite(0,0,"displacement-3");
+            this.displacementSprite4 = this.game.make.sprite(0,0,"displacement-4");
+
+            this.displacementSprites = [
+                this.displacementSprite,
+                this.displacementSprite2,
+                this.displacementSprite3,
+                this.displacementSprite4,
+            ];
+            // this.displacementSprite = this.backgroundGroup.create(0,0,"displace");
+            this.displacementSprite.anchor.set(0.5, 0.5);
+            // this.background.addChild(this.displacementSprite);
+            // this.displacementSprite = this.game.add.sprite(0, 0, "displace");
+            // this.displacementTexture = PIXI.Texture.fromImage('res/displace.png');
+            // this.displacementSprite = new Phaser.Sprite(this.game, 0, 0, this.displacementTexture);
+
+            // this.game.stage.addChild(this.displacementSprite);
+            // this.displacementSprite.x -= 75;
+            // this.displacementSprite.y -= this.displacementSprite.height/2;
+
+            this.displacementFilter = new PIXI.DisplacementFilter(this.displacementSprite.texture);
+            // this.displacementSprite.texture.scaleMode = 2;
+            // this.displacementFilter.scale = new Phaser.Point(5, 5);
             tmp = this.displacementFilter;
 
-            // this.a = this.game.add.sprite(0,0, "displacement");
+            this.ring = this.game.make.sprite(0,0,"ring");
+            this.ring.anchor.set(0.5,0.5);
 
+            // this.container = new PIXI.Container();
+            // this.game.stage.addChild(container);
+
+            // this.a = this.game.add.sprite(0,0, "displacement");
+            // this.background.filters = [this.displacementFilter];
             // this.background.filters = [ this.vduFilter ];
-            this.player.filters = [this.displacementFilter];
+            // this.player.filters = [this.displacementFilter];
+            // this.background.filters = [ this.displacementFilter];
+            this.stage.filters = [this.displacementFilter];
     };
 
     p.createPlugins = function() {
@@ -368,6 +396,15 @@ var p = GameState.prototype;
     p.updateFilters = function() {
         this.vduFilter.update();
         this.invertFilter.invert = this.game.rnd.between(0.1,0.9);
+        if (this.displacementTime <= 0) {
+            console.log("ASDAS");
+            this.displacementIndex = (this.displacementIndex + 1) % (this.displacementSprites.length);
+            this.displacementFilter.map = this.displacementSprites[this.displacementIndex].texture;
+            this.displacementTime = 50;
+        }
+        else {
+            this.displacementTime -= this.game.time.elapsed;
+        }
         
     };
 

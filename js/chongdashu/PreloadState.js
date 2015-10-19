@@ -47,7 +47,7 @@ var p = PreloadState.prototype;
 
         // Loading begins here.
         // --------------------
-        this.game.load.image("background", "res/background.png");
+        this.game.load.image("background", "res/background.jpg");
         this.game.load.image("tile-brown", "res/tile-brown.png");
         this.game.load.image("player", "res/player.png");
         this.game.load.spritesheet("arrow", "res/arrow.png", 32, 32);
@@ -69,6 +69,12 @@ var p = PreloadState.prototype;
         this.game.load.image("particle", "res/particle.png");
         this.game.load.image("particle-small", "res/particle-small.png");
         this.game.load.image("displacement", "res/displacement.png");
+        this.game.load.image("displacement-2", "res/displacement-2.png");
+        this.game.load.image("displacement-3", "res/displacement-3.png");
+        this.game.load.image("displacement-4", "res/displacement-4.png");
+        this.game.load.image("displace", "res/displace.png");
+        this.game.load.image("displace2", "res/displace2.png");
+        this.game.load.image("ring", "res/ring.png");
        
     };
 
